@@ -10,7 +10,8 @@
     "dev": "webpack serve --mode=development"
   },
   "dependencies": {
-    "pixi.js": "^8.8.1"
+    "pixi.js": "^8.8.1",
+    "signals": "^1.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

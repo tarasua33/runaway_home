@@ -1,0 +1,91 @@
+// import { Rectangle, Texture } from "pixi.js";
+import { Texture } from "pixi.js";
+import { AbstractStandardFactory } from "../libs/factories/AbstractStandardFactory";
+import { IGameObject } from "../libs/gameObjects/IGameObject";
+import { BigPlatformSizes, PlatformTypes } from "../models/PlatformsModel";
+import { IPlatforms, Platform } from "../view/platforms/Platform";
+import { GAME_DIMENSIONS } from "../Game";
+
+interface IBuildConfig {
+  parent: IGameObject;
+}
+
+export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
+  public buildUi(params: IBuildConfig): IPlatforms {
+    const { parent } = params;
+    const assetsLoader = this._assetsLoader;
+    const platformSettings = this._models.platformsModel.platformSettings;
+
+    const bigTile = assetsLoader.getTexture("tille_big");
+    const tileSmall = assetsLoader.getTexture("tile");
+
+    const bigTileConf = {
+      w: bigTile.width,
+      h: bigTile.width,
+      texture: bigTile,
+    };
+    const smallTileConf = {
+      w: tileSmall.width,
+      h: tileSmall.height,
+      texture: tileSmall,
+    };
+
+    // eslint-disable-next-line prettier/prettier
+    const tilesParams: Record<PlatformTypes, { texture: Texture, w: number, h: number }> = {
+      [PlatformTypes.big]: bigTileConf,
+      [PlatformTypes.small]: smallTileConf,
+    };
+
+    const platforms: IPlatforms = new Map();
+    // const typeMap: IPlatformsSizes = ;
+    platforms.set(
+      PlatformTypes.big,
+      new Map([
+        [BigPlatformSizes.ONE, []],
+        [BigPlatformSizes.TWO, []],
+        [BigPlatformSizes.FOUR, []],
+        [BigPlatformSizes.SIX, []],
+        [BigPlatformSizes.EIGHT, []],
+        [BigPlatformSizes.TEN, []],
+      ]),
+    );
+    platforms.set(
+      PlatformTypes.small,
+      new Map([
+        [BigPlatformSizes.ONE, []],
+        [BigPlatformSizes.TWO, []],
+        [BigPlatformSizes.FOUR, []],
+        [BigPlatformSizes.SIX, []],
+        [BigPlatformSizes.EIGHT, []],
+        [BigPlatformSizes.TEN, []],
+      ]),
+    );
+
+    for (let i = 0; i < platformSettings.length; i++) {
+      const setting = platformSettings[i];
+
+      for (let j = 0; j < setting.number; j++) {
+        const tileSize = setting.size;
+        const tileParam = tilesParams[setting.type];
+
+        const conf = {
+          x: Math.floor(GAME_DIMENSIONS.width * Math.random()),
+          y: Math.floor(GAME_DIMENSIONS.height * Math.random()),
+          tileConfig: {
+            texture: tileParam.texture,
+            width: tileParam.w * tileSize,
+            height: tileParam.h,
+          },
+        };
+
+        const plt = new Platform(conf);
+        plt.build();
+        parent.addChild(plt);
+
+        platforms.get(setting.type)!.get(setting.size)!.push(plt);
+      }
+    }
+
+    return platforms;
+  }
+}

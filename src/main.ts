@@ -13,7 +13,7 @@ import { Game, GAME_DIMENSIONS } from "./Game";
     backgroundAlpha: 1,
   });
 
-  await app.init({ background: "#1099bb" });
+  await app.init({ background: "#283029" });
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 

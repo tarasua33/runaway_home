@@ -1,0 +1,303 @@
+{
+  "frames": {
+    "tree_bid.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 153,
+        "h": 162
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 153,
+        "h": 162
+      },
+      "sourceSize": {
+        "w": 153,
+        "h": 162
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "tree_small.png": {
+      "frame": {
+        "x": 0,
+        "y": 162,
+        "w": 120,
+        "h": 138
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 120,
+        "h": 138
+      },
+      "sourceSize": {
+        "w": 120,
+        "h": 138
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "tille_big.png": {
+      "frame": {
+        "x": 0,
+        "y": 300,
+        "w": 96,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 96
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "tile.png": {
+      "frame": {
+        "x": 0,
+        "y": 396,
+        "w": 32,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 96
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bush_3.png": {
+      "frame": {
+        "x": 0,
+        "y": 492,
+        "w": 95,
+        "h": 37
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 95,
+        "h": 37
+      },
+      "sourceSize": {
+        "w": 95,
+        "h": 37
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "well.png": {
+      "frame": {
+        "x": 32,
+        "y": 396,
+        "w": 87,
+        "h": 91
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 87,
+        "h": 91
+      },
+      "sourceSize": {
+        "w": 87,
+        "h": 91
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bush_2.png": {
+      "frame": {
+        "x": 96,
+        "y": 300,
+        "w": 89,
+        "h": 36
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 89,
+        "h": 36
+      },
+      "sourceSize": {
+        "w": 89,
+        "h": 36
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bench.png": {
+      "frame": {
+        "x": 120,
+        "y": 162,
+        "w": 85,
+        "h": 39
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 85,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 85,
+        "h": 39
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "box_1.png": {
+      "frame": {
+        "x": 120,
+        "y": 247,
+        "w": 45,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 45,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 45,
+        "h": 45
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bush_1.png": {
+      "frame": {
+        "x": 153,
+        "y": 0,
+        "w": 57,
+        "h": 29
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 57,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 57,
+        "h": 29
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "box_2.png": {
+      "frame": {
+        "x": 153,
+        "y": 57,
+        "w": 35,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 35,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 35,
+        "h": 35
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "box_3.png": {
+      "frame": {
+        "x": 182,
+        "y": 0,
+        "w": 27,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 35
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "mainAtlas.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 209,
+      "h": 587
+    },
+    "scale": 1
+  }
+}

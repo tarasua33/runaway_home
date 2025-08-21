@@ -1,7 +1,7 @@
 import { Container } from "pixi.js";
 
 export interface IGameObject extends Container {
-  buildObject(): void;
+  build(): void;
 
   update(dt: number): void;
 

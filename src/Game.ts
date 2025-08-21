@@ -1,11 +1,19 @@
-import { Assets, Container, Text } from "pixi.js";
+import { Container, Text } from "pixi.js";
 import { MainScene } from "./view/MainScene";
-import { Hero } from "./view/Hero";
+// import { Hero } from "./view/Hero";
+// import { StandardSprite } from "./libs/gameObjects/StandardSprite";
+import { AssetsLoader } from "./libs/utils/AssetsLoader";
+import { GameViewFactory } from "./factories/GameViewFactory";
+import { PlatformsModel } from "./models/PlatformsModel";
 
 export const GAME_DIMENSIONS = {
   width: 1280,
   height: 720,
 };
+
+export interface IModels {
+  platformsModel: PlatformsModel;
+}
 
 export class Game {
   private _stage: Container;
@@ -15,7 +23,7 @@ export class Game {
     this._stage = stage;
 
     const mainScene = (this._mainScene = new MainScene({}));
-    mainScene.buildObject();
+    mainScene.build();
     stage.addChild(mainScene);
   }
 
@@ -23,27 +31,36 @@ export class Game {
     const stage = this._stage;
     const mainScene = this._mainScene;
 
-    const manifest = await fetch("/assets/manifest.json").then((res) =>
-      res.json(),
-    );
-
-    await Assets.init({ manifest, basePath: "/assets" });
+    const assetsLoader = AssetsLoader.getLoader();
+    await assetsLoader.initAssets();
 
     const loadingText = new Text("Loading...", { fill: "white" });
     loadingText.x = GAME_DIMENSIONS.width / 2;
     loadingText.y = GAME_DIMENSIONS.height / 2;
     stage.addChild(loadingText);
 
-    await Assets.loadBundle("preload");
+    await assetsLoader.loadBundle("preload");
 
     loadingText.renderable = false;
     stage.removeChild(loadingText);
     loadingText.destroy({ style: true, texture: true, textureSource: true });
 
-    const heroTexture = Assets.get("hero");
-    const hero = new Hero({ texture: heroTexture, anchor: { x: 0.5, y: 0.5 } });
-    hero.position.set(GAME_DIMENSIONS.width / 2, GAME_DIMENSIONS.height / 2);
-    mainScene.addChild(hero);
+    // const heroTexture = assetsLoader.getTexture("hero", false);
+    // const hero = new Hero({ texture: heroTexture, anchor: { x: 0.5, y: 0.5 } });
+    // hero.position.set(GAME_DIMENSIONS.width / 2, GAME_DIMENSIONS.height / 2);
+    // mainScene.addChild(hero);
+
+    // const treeTexture = assetsLoader.getTexture("tree_bid");
+    // const tree = new StandardSprite({
+    //   texture: treeTexture,
+    //   anchor: { x: 0.5, y: 1 },
+    // });
+    // tree.x = hero.x;
+    // tree.y = GAME_DIMENSIONS.height;
+    // mainScene.addChild(tree);
+
+    const gameViewFactory = new GameViewFactory();
+    gameViewFactory.buildUi({ mainScene });
 
     return true;
   }

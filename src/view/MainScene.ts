@@ -10,7 +10,7 @@ export class MainScene extends StandardContainer {
     super(configs);
   }
 
-  public buildObject(): void {
+  public build(): void {
     const graphic = new Graphics()
       .rect(0, 0, GAME_DIMENSIONS.width, GAME_DIMENSIONS.height)
       .fill({

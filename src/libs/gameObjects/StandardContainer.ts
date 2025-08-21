@@ -22,12 +22,12 @@ export class StandardContainer<T extends StandardContainerConfig = StandardConta
   protected _config: T;
 
   constructor(config: T) {
-    super();
+    super(config);
 
     this._config = config;
   }
 
-  public buildObject(): void {
+  public build(): void {
     // this._setBaseConfig(this);
   }
 

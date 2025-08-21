@@ -6,6 +6,10 @@
         {
           "alias": "hero",
           "src": "bunny.png"
+        },
+        {
+          "alias": "mainAtlas",
+          "src": "gameAtlas/mainAtlas.json"
         }
       ]
     }
