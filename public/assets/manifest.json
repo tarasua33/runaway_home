@@ -1,0 +1,13 @@
+{
+  "bundles": [
+    {
+      "name": "preload",
+      "assets": [
+        {
+          "alias": "hero",
+          "src": "bunny.png"
+        }
+      ]
+    }
+  ]
+}
