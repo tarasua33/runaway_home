@@ -1,18 +1,20 @@
-// import { Rectangle, Texture } from "pixi.js";
 import { Texture } from "pixi.js";
 import { AbstractStandardFactory } from "../libs/factories/AbstractStandardFactory";
-import { IGameObject } from "../libs/gameObjects/IGameObject";
 import { BigPlatformSizes, PlatformTypes } from "../models/PlatformsModel";
-import { IPlatforms, Platform } from "../view/platforms/Platform";
+import {
+  IPlatforms,
+  Platform,
+  PlatformConfig,
+} from "../view/platforms/Platform";
 import { GAME_DIMENSIONS } from "../Game";
 
-interface IBuildConfig {
-  parent: IGameObject;
-}
+// interface IBuildConfig {
+//   parent: IGameObject;
+// }
 
 export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
-  public buildUi(params: IBuildConfig): IPlatforms {
-    const { parent } = params;
+  public buildUi(): IPlatforms {
+    // const { parent } = params;
     const assetsLoader = this._assetsLoader;
     const platformSettings = this._models.platformsModel.platformSettings;
 
@@ -68,7 +70,7 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
         const tileSize = setting.size;
         const tileParam = tilesParams[setting.type];
 
-        const conf = {
+        const conf: PlatformConfig = {
           x: Math.floor(GAME_DIMENSIONS.width * Math.random()),
           y: Math.floor(GAME_DIMENSIONS.height * Math.random()),
           tileConfig: {
@@ -76,11 +78,13 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
             width: tileParam.w * tileSize,
             height: tileParam.h,
           },
+          sizeCnf: setting.size,
+          typeCnf: setting.type,
         };
 
         const plt = new Platform(conf);
         plt.build();
-        parent.addChild(plt);
+        // parent.addChild(plt);
 
         platforms.get(setting.type)!.get(setting.size)!.push(plt);
       }

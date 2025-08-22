@@ -21,7 +21,16 @@ export interface IPlatformSetting {
 }
 
 export class PlatformsModel extends BaseModel {
-  public platformSettings: IPlatformSetting[] = [
+  public readonly sizePlatformTile = 96;
+  public readonly sizes = [
+    BigPlatformSizes.ONE,
+    BigPlatformSizes.TWO,
+    BigPlatformSizes.FOUR,
+    BigPlatformSizes.SIX,
+    BigPlatformSizes.EIGHT,
+    BigPlatformSizes.TEN,
+  ];
+  public readonly platformSettings: IPlatformSetting[] = [
     {
       type: PlatformTypes.big,
       size: 10,

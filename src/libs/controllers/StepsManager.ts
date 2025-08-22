@@ -1,14 +1,14 @@
 import { BaseStep, BaseStepParams } from "./BaseStep";
-// import { Signal } from "../utils/Signal";
+import { Signal } from "../utils/Signal";
 import { ISequence, IStepAndParams } from "./Sequence";
 
 export class StepsManager {
-  // public completeSteps = new Signal();
+  public completeSteps = new Signal();
 
   private _sequences?: ISequence[];
 
-  private _consequentsSteps: IStepAndParams[] = [];
-  // private _permanentsSteps: IStepAndParams[] = [];
+  private _stepByStepSteps: IStepAndParams[] = [];
+  private _permanentsSteps: IStepAndParams[] = [];
   private _dynamicSteps = new Set<BaseStep>();
 
   private _numPermanentsSteps = 0;
@@ -30,15 +30,15 @@ export class StepsManager {
   ): void {
     this._dynamicSteps.add(step);
     console.log("start", step);
-    // step.completeStepSignal.addOnce(this._onCompleteDynamicStep, this);
+    step.completeStepSignal.addOnce(this._onCompleteDynamicStep, this);
     step.start(params);
   }
 
-  // private _onCompleteDynamicStep(step: BaseStep): void {
-  //   if (this._dynamicSteps.has(step)) {
-  //     this._dynamicSteps.delete(step);
-  //   }
-  // }
+  private _onCompleteDynamicStep(step: BaseStep): void {
+    if (this._dynamicSteps.has(step)) {
+      this._dynamicSteps.delete(step);
+    }
+  }
 
   private _playNextSequence(): void {
     const sequences = this._sequences;
@@ -53,9 +53,9 @@ export class StepsManager {
 
   private _setUpSequence(sequence: ISequence): void {
     this._numPermanentsSteps = 0;
-    this._consequentsSteps = sequence.consequents;
-    // this._permanentsSteps = sequence.permanents;
-    this._numConsequentsSteps = sequence.consequents.length;
+    this._stepByStepSteps = sequence.stepByStep;
+    this._permanentsSteps = sequence.permanents;
+    this._numConsequentsSteps = sequence.stepByStep.length;
 
     if (sequence.permanents.length > 0) {
       this._setUpPermanentsSteps(sequence.permanents);
@@ -71,43 +71,43 @@ export class StepsManager {
       const step = permanents[i]!.step;
       const params = permanents[i]!.params;
       console.log("start", step);
-      // step.completeStepSignal.addOnce(this._onPermanentStepComplete, this);
+      step.completeStepSignal.addOnce(this._onPermanentStepComplete, this);
       step.start(params);
     }
   }
 
-  // private _onPermanentStepComplete(): void {
-  //   this._numPermanentsSteps--;
+  private _onPermanentStepComplete(): void {
+    this._numPermanentsSteps--;
 
-  //   if (this._numPermanentsSteps === 0) {
-  //     this._tryCompleteSequence();
-  //   }
-  // }
+    if (this._numPermanentsSteps === 0) {
+      this._tryCompleteSequence();
+    }
+  }
 
   private _playNextConsequentStep(): void {
-    const consequentsSteps = this._consequentsSteps;
+    const stepByStepSteps = this._stepByStepSteps;
 
     if (this._numConsequentsSteps > 0) {
-      const stepIndex = consequentsSteps.length - this._numConsequentsSteps;
-      const step = consequentsSteps[stepIndex]!.step;
-      const params = consequentsSteps[stepIndex]!.params;
+      const stepIndex = stepByStepSteps.length - this._numConsequentsSteps;
+      const step = stepByStepSteps[stepIndex]!.step;
+      const params = stepByStepSteps[stepIndex]!.params;
 
       console.log("start", step);
 
-      // step.completeStepSignal.addOnce(this._onConsequentStepComplete, this);
+      step.completeStepSignal.addOnce(this._onConsequentStepComplete, this);
       step.start(params);
     } else {
       this._tryCompleteSequence();
     }
   }
 
-  // private _onConsequentStepComplete(): void {
-  //   if (!this._isForceComplete) {
-  //     this._numConsequentsSteps--;
+  private _onConsequentStepComplete(): void {
+    if (!this._isForceComplete) {
+      this._numConsequentsSteps--;
 
-  //     this._playNextConsequentStep();
-  //   }
-  // }
+      this._playNextConsequentStep();
+    }
+  }
 
   private _tryCompleteSequence(): void {
     if (!this._isForceComplete) {
@@ -119,31 +119,31 @@ export class StepsManager {
 
   private _onComplete(): void {
     this._sequences = [];
-    this._consequentsSteps = [];
-    // this._permanentsSteps = [];
+    this._stepByStepSteps = [];
+    this._permanentsSteps = [];
 
     for (const step of this._dynamicSteps) {
-      // step.completeStepSignal.removeAll();
+      step.completeStepSignal.removeAll();
       step.forceComplete();
     }
     this._dynamicSteps.clear();
 
-    // this.completeSteps.dispatch();
+    this.completeSteps.dispatch();
   }
 
-  // public forceComplete(): void {
-  //   this._isForceComplete = true;
+  public forceComplete(): void {
+    this._isForceComplete = true;
 
-  //   for (const step of this._consequentsSteps) {
-  //     // step.step.completeStepSignal.removeAll();
-  //     step.step.forceComplete();
-  //   }
+    for (const step of this._stepByStepSteps) {
+      step.step.completeStepSignal.removeAll();
+      step.step.forceComplete();
+    }
 
-  //   for (const step of this._permanentsSteps) {
-  //     // step.step.completeStepSignal.removeAll();
-  //     step.step.forceComplete();
-  //   }
+    for (const step of this._permanentsSteps) {
+      step.step.completeStepSignal.removeAll();
+      step.step.forceComplete();
+    }
 
-  //   this._onComplete();
-  // }
+    this._onComplete();
+  }
 }

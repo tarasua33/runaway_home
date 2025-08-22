@@ -5,10 +5,15 @@ import { MainScene } from "./view/MainScene";
 import { AssetsLoader } from "./libs/utils/AssetsLoader";
 import { GameViewFactory } from "./factories/GameViewFactory";
 import { PlatformsModel } from "./models/PlatformsModel";
+import { BaseGameController } from "./controllers/BaseGameController";
+
+const widthGame = 1280;
+const heightGame = 720;
 
 export const GAME_DIMENSIONS = {
-  width: 1280,
-  height: 720,
+  width: widthGame,
+  height: heightGame,
+  halfWidth: widthGame / 2,
 };
 
 export interface IModels {
@@ -45,22 +50,13 @@ export class Game {
     stage.removeChild(loadingText);
     loadingText.destroy({ style: true, texture: true, textureSource: true });
 
-    // const heroTexture = assetsLoader.getTexture("hero", false);
-    // const hero = new Hero({ texture: heroTexture, anchor: { x: 0.5, y: 0.5 } });
-    // hero.position.set(GAME_DIMENSIONS.width / 2, GAME_DIMENSIONS.height / 2);
-    // mainScene.addChild(hero);
-
-    // const treeTexture = assetsLoader.getTexture("tree_bid");
-    // const tree = new StandardSprite({
-    //   texture: treeTexture,
-    //   anchor: { x: 0.5, y: 1 },
-    // });
-    // tree.x = hero.x;
-    // tree.y = GAME_DIMENSIONS.height;
-    // mainScene.addChild(tree);
-
     const gameViewFactory = new GameViewFactory();
-    gameViewFactory.buildUi({ mainScene });
+    const gameView = gameViewFactory.buildUi({ mainScene });
+
+    const baseGameController = new BaseGameController();
+    baseGameController.start({
+      gameView,
+    });
 
     return true;
   }

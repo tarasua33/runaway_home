@@ -7,12 +7,12 @@ export interface IStepAndParams {
 
 export interface ISequence {
   permanents: IStepAndParams[];
-  consequents: IStepAndParams[];
+  stepByStep: IStepAndParams[];
 }
 
 export class Sequence {
   public permanents: IStepAndParams[] = [];
-  public consequents: IStepAndParams[] = [];
+  public stepByStep: IStepAndParams[] = [];
 
   public addPermanent<S extends BaseStep<P>, P extends BaseStepParams>(
     step: S,
@@ -21,10 +21,10 @@ export class Sequence {
     this.permanents.push({ step, params });
   }
 
-  public addConsequents<S extends BaseStep<P>, P extends BaseStepParams>(
+  public addStepByStep<S extends BaseStep<P>, P extends BaseStepParams>(
     step: S,
     params: P,
   ): void {
-    this.consequents.push({ step, params });
+    this.stepByStep.push({ step, params });
   }
 }

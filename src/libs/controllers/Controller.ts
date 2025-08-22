@@ -12,9 +12,9 @@ export abstract class Controller<
 > extends BaseStep<T> {
   protected _mng = new StepsManager();
 
-  // constructor(models: IModels) {
-  //   super(models);
+  constructor() {
+    super();
 
-  //   this._mng.completeSteps.add(this._onComplete, this);
-  // }
+    this._mng.completeSteps.add(this._onComplete, this);
+  }
 }

@@ -27,7 +27,7 @@ export class GameViewFactory extends AbstractBaseFactory {
     });
 
     const view: IGameView = {
-      platforms: platformFactory.buildUi({ parent: platformMoveContainer }),
+      platforms: platformFactory.buildUi(),
       platformMoveContainer: platformMoveContainer,
     };
 
