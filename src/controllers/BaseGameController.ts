@@ -43,6 +43,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     startSequence.addPermanent(this._updatePlatformsStep, {
       platforms: gameView.platforms,
       platformContainer: gameView.platformMoveContainer,
+      characterContainer: gameView.characterContainer,
     });
 
     this._mng.start([startSequence]);

@@ -27,7 +27,7 @@ export class SetStartPositionsPlatformsStep<
 
     let previousPlt;
 
-    const startPlt = this._getBasePlatform(platforms);
+    const startPlt = this._getBasePlatform(platforms, sizePlatformTile);
     // platformsToAdd.push(startPlt);
 
     const platformBigData: IPlatformData[] = this._getPlatformData(
@@ -82,14 +82,16 @@ export class SetStartPositionsPlatformsStep<
         platformBigData.splice(dataIdx, 1);
       }
 
-      newPlt.x = previousPlt.x + previousPlt.width + sizeBetween;
-      newPlt.y = getPositionY(previousPlt, sizeBetween, newPlt.height);
+      const x =
+        previousPlt.x + newPlt.width / 2 + previousPlt.width / 2 + sizeBetween;
+      const y = getPositionY(previousPlt, sizeBetween, newPlt.height);
+      newPlt.setPosition(x, y);
 
       platformsToAdd.push(newPlt);
       previousPlt = newPlt;
 
       // eslint-disable-next-line prettier/prettier
-      if (newPlt.x + newPlt.width > GAME_DIMENSIONS.width + GAME_DIMENSIONS.width / 2) {
+      if (newPlt.x + (newPlt.width / 2) > GAME_DIMENSIONS.width + GAME_DIMENSIONS.width / 2) {
         break;
       }
     }
@@ -117,8 +119,10 @@ export class SetStartPositionsPlatformsStep<
         platformBigData.splice(dataIdx, 1);
       }
 
-      newPlt.x = previousPlt.x - newPlt.width - sizeBetween;
-      newPlt.y = getPositionY(previousPlt, sizeBetween, newPlt.height);
+      const x =
+        previousPlt.x - previousPlt.width / 2 - newPlt.width / 2 - sizeBetween;
+      const y = getPositionY(previousPlt, sizeBetween, newPlt.height);
+      newPlt.setPosition(x, y);
 
       leftPlatforms.push(newPlt);
       previousPlt = newPlt;
@@ -135,14 +139,19 @@ export class SetStartPositionsPlatformsStep<
     }
   }
 
-  private _getBasePlatform(platforms: IPlatforms): Platform {
+  private _getBasePlatform(
+    platforms: IPlatforms,
+    sizePlatformTile: number,
+  ): Platform {
     const plt = platforms
       .get(PlatformTypes.big)!
       .get(BigPlatformSizes.TEN)!
       .pop()!;
 
-    plt.x = 0;
-    plt.y = GAME_DIMENSIONS.height * (3 / 4);
+    plt.setPosition(
+      0,
+      Math.round(GAME_DIMENSIONS.height * (3 / 4) + sizePlatformTile / 2),
+    );
 
     return plt;
   }

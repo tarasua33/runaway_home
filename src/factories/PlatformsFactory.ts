@@ -6,15 +6,14 @@ import {
   Platform,
   PlatformConfig,
 } from "../view/platforms/Platform";
-import { GAME_DIMENSIONS } from "../Game";
+import { PhysicEngine } from "../libs/utils/PhysicEngine";
 
-// interface IBuildConfig {
-//   parent: IGameObject;
-// }
+interface IBuildConfig {
+  physicEngine: PhysicEngine;
+}
 
 export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
-  public buildUi(): IPlatforms {
-    // const { parent } = params;
+  public buildUi({ physicEngine }: IBuildConfig): IPlatforms {
     const assetsLoader = this._assetsLoader;
     const platformSettings = this._models.platformsModel.platformSettings;
 
@@ -63,6 +62,8 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
       ]),
     );
 
+    const randomX = -1000;
+    const randomY = -500;
     for (let i = 0; i < platformSettings.length; i++) {
       const setting = platformSettings[i];
 
@@ -71,15 +72,17 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
         const tileParam = tilesParams[setting.type];
 
         const conf: PlatformConfig = {
-          x: Math.floor(GAME_DIMENSIONS.width * Math.random()),
-          y: Math.floor(GAME_DIMENSIONS.height * Math.random()),
           tileConfig: {
+            anchor: { x: 0.5, y: 0.5 },
             texture: tileParam.texture,
             width: tileParam.w * tileSize,
             height: tileParam.h,
           },
           sizeCnf: setting.size,
           typeCnf: setting.type,
+          physicEngine,
+          x: randomX,
+          y: randomY,
         };
 
         const plt = new Platform(conf);

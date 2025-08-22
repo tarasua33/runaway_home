@@ -1,11 +1,13 @@
 import { BaseStep, BaseStepParams } from "../../libs/controllers/BaseStep";
 import { PlatformTypes } from "../../models/PlatformsModel";
+import { CharacterContainer } from "../../view/character/CharacterContainer";
 import { IPlatforms, Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
 
 export interface UpdatePlatformsStepParams extends BaseStepParams {
   platforms: IPlatforms;
   platformContainer: PlatformMoveContainer;
+  characterContainer: CharacterContainer;
 }
 
 interface IPlatformData {
@@ -17,13 +19,16 @@ export class UpdatePlatformsStep<
   T extends UpdatePlatformsStepParams = UpdatePlatformsStepParams,
 > extends BaseStep<UpdatePlatformsStepParams> {
   public start(params: T): void {
-    const { platformContainer } = params;
+    const { platformContainer, characterContainer } = params;
     this._params = params;
     platformContainer.removePlatformSignal.add(this._onPlatformRemoved, this);
     platformContainer.getNewPlatformSignal.add(this._getNewPlatform, this);
+
+    characterContainer.switchStaticBody(false);
   }
 
   private _onPlatformRemoved(plt: Platform): void {
+    plt.setPosition(-2000, 0);
     this._params.platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
   }
 

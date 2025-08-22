@@ -6,6 +6,7 @@ import { AssetsLoader } from "./libs/utils/AssetsLoader";
 import { GameViewFactory } from "./factories/GameViewFactory";
 import { PlatformsModel } from "./models/PlatformsModel";
 import { BaseGameController } from "./controllers/BaseGameController";
+import { PhysicEngine } from "./libs/utils/PhysicEngine";
 
 const widthGame = 1280;
 const heightGame = 720;
@@ -23,6 +24,7 @@ export interface IModels {
 export class Game {
   private _stage: Container;
   private _mainScene!: MainScene;
+  private _physicEngine!: PhysicEngine;
 
   constructor(stage: Container) {
     this._stage = stage;
@@ -50,8 +52,11 @@ export class Game {
     stage.removeChild(loadingText);
     loadingText.destroy({ style: true, texture: true, textureSource: true });
 
+    const physicEngine = PhysicEngine.getEngine();
+    this._physicEngine = physicEngine;
+
     const gameViewFactory = new GameViewFactory();
-    const gameView = gameViewFactory.buildUi({ mainScene });
+    const gameView = gameViewFactory.buildUi({ mainScene, physicEngine });
 
     const baseGameController = new BaseGameController();
     baseGameController.start({
@@ -61,8 +66,9 @@ export class Game {
     return true;
   }
 
-  public update(dt: number): void {
+  public update(dt: number, deltaMS: number): void {
     this._mainScene.update(dt);
+    if (this._physicEngine) this._physicEngine.update(deltaMS);
   }
 
   public resize(): void {

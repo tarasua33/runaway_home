@@ -9,7 +9,7 @@ export class PlatformMoveContainer extends StandardContainer {
   public readonly getNewPlatformSignal = new Signal();
 
   private _platforms!: Platform[];
-  private _speed = 2;
+  private _speed = 1;
   private _isPlay = false;
 
   public setSpeed(speed: number): void {
@@ -27,9 +27,11 @@ export class PlatformMoveContainer extends StandardContainer {
   public addPlatform(newPlt: Platform, offset: number): void {
     const platforms = this._platforms;
     const previousPlt = platforms[platforms.length - 1];
-    newPlt.x = previousPlt.x + previousPlt.width + offset;
 
-    newPlt.y = getPositionY(previousPlt, offset, newPlt.height);
+    const x = previousPlt.x + previousPlt.width / 2 + newPlt.width / 2 + offset;
+    const y = getPositionY(previousPlt, offset, newPlt.height);
+
+    newPlt.setPosition(x, y);
 
     platforms.push(newPlt);
     this.addChild(newPlt);
@@ -44,13 +46,13 @@ export class PlatformMoveContainer extends StandardContainer {
   }
 
   public update(dt: number): void {
-    super.update(dt);
-
     if (this._isPlay) {
       for (const plt of this._platforms) {
-        plt.x -= this._speed;
+        plt.setPosition(plt.x - this._speed, plt.y);
       }
     }
+
+    super.update(dt);
 
     if (
       this._platforms[0].x <
@@ -63,7 +65,9 @@ export class PlatformMoveContainer extends StandardContainer {
     }
 
     // eslint-disable-next-line prettier/prettier
-    if ((this._platforms[this._platforms.length - 1].x + this._platforms[this._platforms.length - 1].width) < (GAME_DIMENSIONS.width + GAME_DIMENSIONS.halfWidth)) {
+    if ((this._platforms[this._platforms.length - 1].x + this._platforms[this._platforms.length - 1].width / 2) <
+      // eslint-disable-next-line prettier/prettier
+      (GAME_DIMENSIONS.width + GAME_DIMENSIONS.halfWidth)) {
       this.getNewPlatformSignal.dispatch();
     }
   }

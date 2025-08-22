@@ -46,7 +46,7 @@ import { Game, GAME_DIMENSIONS } from "./Game";
 
   if (success) {
     app.ticker.add((time) => {
-      game.update(time.deltaTime);
+      game.update(time.deltaTime, time.deltaMS);
     });
   }
 })();

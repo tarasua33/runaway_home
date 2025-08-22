@@ -1,8 +1,9 @@
 import { IGameObject } from "../gameObjects/IGameObject";
 import { AbstractBaseFactory } from "./AbstractBaseFactory";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IBuildConfig {
-  parent: IGameObject;
+  // parent: IGameObject;
 }
 
 export abstract class AbstractStandardFactory<

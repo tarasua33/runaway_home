@@ -1,8 +1,15 @@
 import { GAME_DIMENSIONS } from "../../Game";
 
-interface IPoint {
+export interface IPoint {
   x: number;
   y: number;
+}
+
+export interface IRect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
 }
 
 export function getPositionY(
@@ -11,9 +18,9 @@ export function getPositionY(
   height: number,
 ): number {
   // eslint-disable-next-line prettier/prettier
-  const potentialY = previousPlt.y - sizeBetween * 2 + Math.random() * sizeBetween * 4;
+  const potentialY = previousPlt.y + height / 2 - sizeBetween * 2 + Math.random() * sizeBetween * 4;
   const newY = Math.max(
-    Math.min(potentialY, GAME_DIMENSIONS.height - height),
+    Math.min(potentialY, GAME_DIMENSIONS.height - height / 2),
     GAME_DIMENSIONS.height / 4,
   );
 
