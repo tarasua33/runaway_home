@@ -1,26 +1,29 @@
-import { BaseStep, BaseStepParams } from "../../libs/controllers/BaseStep";
+import {
+  BaseStep,
+  BaseStepParams,
+} from "../../libs/controllers/steps/BaseStep";
 import { IPlatformData } from "../../libs/utils/GameHelper";
 import { PlatformTypes } from "../../models/PlatformsModel";
-import { Character } from "../../view/character/Character";
+// import { Character } from "../../view/character/Character";
 import { IPlatforms, Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
 
 export interface UpdatePlatformsStepParams extends BaseStepParams {
   platforms: IPlatforms;
   platformContainer: PlatformMoveContainer;
-  character: Character;
 }
 
 export class UpdatePlatformsStep<
   T extends UpdatePlatformsStepParams = UpdatePlatformsStepParams,
 > extends BaseStep<UpdatePlatformsStepParams> {
   public start(params: T): void {
-    const { platformContainer, character } = params;
+    const { platformContainer } = params;
     this._params = params;
+
     platformContainer.removePlatformSignal.add(this._onPlatformRemoved, this);
     platformContainer.getNewPlatformSignal.add(this._getNewPlatform, this);
 
-    character.switchStaticBody(false);
+    // character.switchStaticBody(false);
   }
 
   private _onPlatformRemoved(plt: Platform): void {
@@ -65,5 +68,17 @@ export class UpdatePlatformsStep<
     }
 
     return data;
+  }
+
+  protected _onComplete(): void {
+    const platformContainer = this._params.platformContainer;
+    platformContainer.removePlatformSignal.removeAll();
+    platformContainer.getNewPlatformSignal.removeAll();
+
+    super._onComplete();
+  }
+
+  public forceComplete(): void {
+    this._onComplete();
   }
 }

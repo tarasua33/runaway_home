@@ -1,14 +1,19 @@
 import { IGameView } from "../factories/GameViewFactory";
 import { Controller, IControllerParams } from "../libs/controllers/Controller";
+import { AwaitTimeStep } from "../libs/controllers/steps/AwaitTimeStep";
 import { Sequence } from "../libs/controllers/Sequence";
+// import { Signal } from "../libs/utils/Signal";
 import { UserInteractionDispatcher } from "../libs/utils/UserInteractionDispatcher";
+import { CharacterAppearStep } from "./steps/CharacterAppearStep";
 import { JumpStep } from "./steps/JumpStep";
+import { ListeningCharacterStep } from "./steps/ListeningCharacterStep";
 import { PlayerActionListeningStep } from "./steps/PlayerActionListeningStep";
-
+import { PlayGameStep } from "./steps/PlayGameStep";
 import {
   SetStartPositionsPlatformsStep,
   SetStartPositionsPlatformsStepParams,
 } from "./steps/StartPositionsPlatformsStep";
+import { StopGameStep } from "./steps/StopGameStep";
 import { UpdatePlatformsStep } from "./steps/UpdatePlatformsStep";
 
 interface IControllerBaseParams extends IControllerParams {
@@ -17,9 +22,14 @@ interface IControllerBaseParams extends IControllerParams {
 }
 
 export class BaseGameController extends Controller<IControllerBaseParams> {
-  _updatePlatformsStep: UpdatePlatformsStep;
-  _playerActionListeningStep: PlayerActionListeningStep;
-  // private _platforms!: IPlatforms;
+  // public readonly gameEndSignal = new Signal();
+  private _updatePlatformsStep: UpdatePlatformsStep;
+  private _playerActionListeningStep: PlayerActionListeningStep;
+  private _characterAppearStep: CharacterAppearStep;
+  private _playGameStep: PlayGameStep;
+  private _listeningCharacterStep: ListeningCharacterStep;
+  private _stopGameStep!: StopGameStep;
+
   private _gameView!: IGameView;
 
   constructor() {
@@ -27,6 +37,12 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
 
     this._updatePlatformsStep = new UpdatePlatformsStep();
     this._playerActionListeningStep = new PlayerActionListeningStep();
+    this._characterAppearStep = new CharacterAppearStep();
+    this._playGameStep = new PlayGameStep();
+    this._listeningCharacterStep = new ListeningCharacterStep();
+    this._stopGameStep = new StopGameStep();
+
+    this._mng.completeSteps.removeAll();
   }
 
   public start(params: IControllerBaseParams): void {
@@ -37,26 +53,49 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
 
     const startSequence = new Sequence();
     // CONSEQUENCES
-    const startStep = new SetStartPositionsPlatformsStep();
+    // 1
+    const SetStartPositionsStep = new SetStartPositionsPlatformsStep();
     const startStepParams: SetStartPositionsPlatformsStepParams = {
       platforms: gameView.platforms,
       platformContainer: gameView.platformMoveContainer,
     };
+    startSequence.addStepByStep(SetStartPositionsStep, startStepParams);
+    // 2
+    startSequence.addStepByStep(this._characterAppearStep, {
+      character: gameView.character,
+    });
+    // 3
+    startSequence.addStepByStep(new AwaitTimeStep(), {
+      delay: 0.5,
+    });
+    //4
+    startSequence.addStepByStep(this._playGameStep, {
+      platformMoveContainer: gameView.platformMoveContainer,
+    });
 
-    startSequence.addStepByStep(startStep, startStepParams);
-
+    const playSequence = new Sequence();
     // PERMANENT
-    startSequence.addPermanent(this._updatePlatformsStep, {
+    // 1
+    playSequence.addPermanent(this._updatePlatformsStep, {
       platforms: gameView.platforms,
       platformContainer: gameView.platformMoveContainer,
+      // character: gameView.character,
+    });
+    // 2
+    playSequence.addPermanent(this._playerActionListeningStep, {
+      userInteractionDispatcher,
+    });
+    //3
+    this._listeningCharacterStep.completeStepSignal.addOnce(
+      this._onGameFail,
+      this,
+    );
+    playSequence.addPermanent(this._listeningCharacterStep, {
       character: gameView.character,
     });
 
-    startSequence.addPermanent(this._playerActionListeningStep, {
-      userInteractionDispatcher,
-    });
-
-    this._mng.start([startSequence]);
+    // RUN
+    this._mng.start([startSequence, playSequence]);
   }
 
   private _onJump(): void {
@@ -66,6 +105,24 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
   }
 
   protected _onComplete(): void {
+    this._listeningCharacterStep.completeStepSignal.removeAll();
     this._playerActionListeningStep.pointerDownSignal.removeAll();
+    this._updatePlatformsStep.forceComplete();
+
+    super._onComplete();
+  }
+
+  private _onGameFail(): void {
+    this._mng.addDynamicStep(this._stopGameStep, {
+      platformMoveContainer: this._gameView.platformMoveContainer,
+    });
+
+    this.forceComplete();
+
+    this.completeStepSignal.dispatch(false);
+  }
+
+  public forceComplete(): void {
+    this._mng.forceComplete();
   }
 }

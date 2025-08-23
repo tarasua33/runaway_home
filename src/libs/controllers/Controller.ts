@@ -1,5 +1,5 @@
 // import { IModels } from "../../models/Models";
-import { BaseStep, BaseStepParams } from "./BaseStep";
+import { BaseStep, BaseStepParams } from "./steps/BaseStep";
 import { StepsManager } from "./StepsManager";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

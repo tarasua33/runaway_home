@@ -1,7 +1,7 @@
-import { IModels } from "../../Game";
-import { CharacterModel } from "../../models/CharacterModel";
-import { PlatformsModel } from "../../models/PlatformsModel";
-import { Signal } from "../utils/Signal";
+import { IModels } from "../../../Game";
+import { CharacterModel } from "../../../models/CharacterModel";
+import { PlatformsModel } from "../../../models/PlatformsModel";
+import { Signal } from "../../utils/Signal";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BaseStepParams {

@@ -1,4 +1,4 @@
-import { BaseStep, BaseStepParams } from "./BaseStep";
+import { BaseStep, BaseStepParams } from "./steps/BaseStep";
 
 export interface IStepAndParams {
   step: BaseStep;

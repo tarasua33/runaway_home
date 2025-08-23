@@ -5,22 +5,28 @@ import {
 } from "../../libs/gameObjects/StandardContainer";
 import { PhysicEngine } from "../../libs/physic/PhysicEngine";
 import { IPhysicBody } from "../../libs/physic/IPhysicBody";
+import { Signal } from "../../libs/utils/Signal";
 // import { Body } from "matter-js";
 
 interface CharacterConfig extends StandardContainerConfig {
   physicEngine: PhysicEngine;
   characterSize: { w: number; h: number };
   maxJumps: number;
+  failY: number;
 }
 
 const JUMP_Y_FORCE = -0.5;
 const characterFixedX = 300;
 
 export class Character extends StandardContainer<CharacterConfig> {
+  public readonly failSignal = new Signal();
+  public readonly animationComplete = new Signal();
+
   private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
   private _fixedX = characterFixedX;
   private _jumps = 0;
+  private _firstCollide = true;
 
   public build(): void {
     super.build();
@@ -59,6 +65,10 @@ export class Character extends StandardContainer<CharacterConfig> {
   }
 
   private _onCollide(): void {
+    if (this._firstCollide) {
+      this._firstCollide = false;
+      this.animationComplete.dispatch();
+    }
     this._jumps = 0;
   }
 
@@ -80,5 +90,9 @@ export class Character extends StandardContainer<CharacterConfig> {
     this.x = this._body.position.x;
     this.y = this._body.position.y;
     this.rotation = this._body.angle;
+
+    if (this.y > this._config.failY) {
+      this.failSignal.dispatch();
+    }
   }
 }

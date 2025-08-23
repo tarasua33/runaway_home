@@ -1,4 +1,7 @@
-import { BaseStep, BaseStepParams } from "../../libs/controllers/BaseStep";
+import {
+  BaseStep,
+  BaseStepParams,
+} from "../../libs/controllers/steps/BaseStep";
 import { Signal } from "../../libs/utils/Signal";
 import { UserInteractionDispatcher } from "../../libs/utils/UserInteractionDispatcher";
 
@@ -23,8 +26,9 @@ export class PlayerActionListeningStep<
   }
 
   protected _onComplete(): void {
-    this._params.userInteractionDispatcher.pointerDownSignal.remove(
-      this._onPointerDown,
-    );
+    // eslint-disable-next-line prettier/prettier
+    this._params.userInteractionDispatcher.pointerDownSignal.remove(this._onPointerDown);
+
+    super._onComplete();
   }
 }

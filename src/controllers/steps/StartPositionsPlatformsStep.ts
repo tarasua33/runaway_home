@@ -1,5 +1,8 @@
 import { GAME_DIMENSIONS } from "../../Game";
-import { BaseStep, BaseStepParams } from "../../libs/controllers/BaseStep";
+import {
+  BaseStep,
+  BaseStepParams,
+} from "../../libs/controllers/steps/BaseStep";
 import { getPositionY, IPlatformData } from "../../libs/utils/GameHelper";
 import { BigPlatformSizes, PlatformTypes } from "../../models/PlatformsModel";
 import { IPlatforms, Platform } from "../../view/platforms/Platform";
@@ -52,7 +55,6 @@ export class SetStartPositionsPlatformsStep<
     );
 
     platformContainer.setPlatforms(platformsToAdd);
-    platformContainer.play();
 
     this._onComplete();
   }

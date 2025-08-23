@@ -1,4 +1,7 @@
-import { BaseStep, BaseStepParams } from "../../libs/controllers/BaseStep";
+import {
+  BaseStep,
+  BaseStepParams,
+} from "../../libs/controllers/steps/BaseStep";
 import { Character } from "../../view/character/Character";
 
 export interface JumpStepParams extends BaseStepParams {

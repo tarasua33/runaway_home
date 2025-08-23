@@ -1,3 +1,4 @@
+import { GAME_DIMENSIONS } from "../Game";
 import { AbstractStandardFactory } from "../libs/factories/AbstractStandardFactory";
 import { StandardContainer } from "../libs/gameObjects/StandardContainer";
 import { PhysicEngine } from "../libs/physic/PhysicEngine";
@@ -18,6 +19,7 @@ export class CharacterFactory extends AbstractStandardFactory<Character> {
       x: startPosition.x,
       y: startPosition.y,
       maxJumps: maxJumps,
+      failY: GAME_DIMENSIONS.height + characterSize.h * 2,
     });
     character.build();
     parent.addChild(character);

@@ -42,7 +42,7 @@ export class PlatformMoveContainer extends StandardContainer {
   }
 
   public stop(): void {
-    this._isPlay = true;
+    this._isPlay = false;
   }
 
   public update(dt: number): void {

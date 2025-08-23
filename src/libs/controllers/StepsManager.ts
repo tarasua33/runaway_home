@@ -1,4 +1,4 @@
-import { BaseStep, BaseStepParams } from "./BaseStep";
+import { BaseStep, BaseStepParams } from "./steps/BaseStep";
 import { Signal } from "../utils/Signal";
 import { ISequence, IStepAndParams } from "./Sequence";
 

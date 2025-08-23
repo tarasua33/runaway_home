@@ -1,14 +1,11 @@
 import { Container, Text } from "pixi.js";
 import { MainScene } from "./view/MainScene";
-// import { Hero } from "./view/Hero";
-// import { StandardSprite } from "./libs/gameObjects/StandardSprite";
 import { AssetsLoader } from "./libs/utils/AssetsLoader";
-import { GameViewFactory } from "./factories/GameViewFactory";
 import { PlatformsModel } from "./models/PlatformsModel";
-import { BaseGameController } from "./controllers/BaseGameController";
 import { PhysicEngine } from "./libs/physic/PhysicEngine";
-import { UserInteractionDispatcher } from "./libs/utils/UserInteractionDispatcher";
 import { CharacterModel } from "./models/CharacterModel";
+import { BaseGameState } from "./controllers/BaseGameState";
+import { UserInteractionDispatcher } from "./libs/utils/UserInteractionDispatcher";
 
 const widthGame = 1280;
 const heightGame = 720;
@@ -62,13 +59,11 @@ export class Game {
 
     const userInteractionDispatcher = new UserInteractionDispatcher(this._view);
 
-    const gameViewFactory = new GameViewFactory();
-    const gameView = gameViewFactory.buildUi({ mainScene, physicEngine });
-
-    const baseGameController = new BaseGameController();
-    baseGameController.start({
-      gameView,
+    const baseGame = new BaseGameState();
+    baseGame.start({
       userInteractionDispatcher,
+      mainScene,
+      physicEngine,
     });
 
     return true;
