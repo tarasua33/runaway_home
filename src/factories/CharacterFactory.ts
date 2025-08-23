@@ -1,6 +1,6 @@
 import { AbstractStandardFactory } from "../libs/factories/AbstractStandardFactory";
 import { StandardContainer } from "../libs/gameObjects/StandardContainer";
-import { PhysicEngine } from "../libs/utils/PhysicEngine";
+import { PhysicEngine } from "../libs/physic/PhysicEngine";
 import { Character } from "../view/character/Character";
 
 interface IBuildConfig {
@@ -10,9 +10,14 @@ interface IBuildConfig {
 
 export class CharacterFactory extends AbstractStandardFactory<Character> {
   public buildUi({ parent, physicEngine }: IBuildConfig): Character {
+    const { characterSize, startPosition, maxJumps } =
+      this._models.characterModel;
     const character = new Character({
       physicEngine,
-      characterSize: this._models.characterModel.characterSize,
+      characterSize: characterSize,
+      x: startPosition.x,
+      y: startPosition.y,
+      maxJumps: maxJumps,
     });
     character.build();
     parent.addChild(character);

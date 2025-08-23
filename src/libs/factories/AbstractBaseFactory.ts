@@ -10,8 +10,8 @@ export abstract class AbstractBaseFactory {
   constructor() {
     this._assetsLoader = AssetsLoader.getLoader();
     this._models = {
-      platformsModel: PlatformsModel.getModel(PlatformsModel) as PlatformsModel,
-      characterModel: CharacterModel.getModel<CharacterModel>(CharacterModel),
+      platformsModel: PlatformsModel.getModel(),
+      characterModel: CharacterModel.getModel(),
     };
   }
 }

@@ -1,5 +1,12 @@
 import Matter, { Engine, World, Body, Bodies } from "matter-js";
-import { IPoint, IRect } from "./GameHelper";
+import { IPoint, IRect } from "../utils/GameHelper";
+import { injectPhysicBodyAll } from "./PhysicBodyInject";
+import { IPhysicBody } from "./IPhysicBody";
+
+interface IMatterPair extends Matter.Pair {
+  bodyA: IPhysicBody;
+  bodyB: IPhysicBody;
+}
 
 export class PhysicEngine {
   static instance: PhysicEngine;
@@ -14,14 +21,18 @@ export class PhysicEngine {
   private readonly world: World;
 
   constructor() {
+    injectPhysicBodyAll();
+
     const engine = (this.engine = Engine.create());
     this.world = engine.world;
     engine.world.gravity.scale = 0.004;
 
     Matter.Events.on(engine, "collisionStart", (event) => {
-      // eslint-disable-next-line prettier/prettier
-      event.pairs.forEach(pair => {
+      event.pairs.forEach((pair) => {
         console.log("Collision between:", pair.bodyA.label, pair.bodyB.label);
+
+        (pair as IMatterPair).bodyA.onCollide((pair as IMatterPair).bodyA);
+        (pair as IMatterPair).bodyB.onCollide((pair as IMatterPair).bodyB);
       });
     });
   }
@@ -34,8 +45,13 @@ export class PhysicEngine {
     Body.setInertia(body, Infinity);
   }
 
-  public createRectangleBody({ x, y, w, h }: IRect): Body {
-    return Bodies.rectangle(x, y, w, h);
+  public createRectangleBody({ x, y, w, h }: IRect): IPhysicBody {
+    return Bodies.rectangle(x, y, w, h) as IPhysicBody;
+  }
+
+  public correctionBodyX(body: Body, fixedX: number): void {
+    Body.setVelocity(body, { x: 0, y: body.velocity.y });
+    Body.setPosition(body, { x: fixedX, y: body.position.y });
   }
 
   public setPosition(body: Body, x: number, y: number): void {

@@ -16,8 +16,8 @@ export abstract class BaseStep<T extends BaseStepParams = BaseStepParams> {
 
   constructor() {
     this._models = {
-      platformsModel: PlatformsModel.getModel<PlatformsModel>(PlatformsModel),
-      characterModel: CharacterModel.getModel<CharacterModel>(CharacterModel),
+      platformsModel: PlatformsModel.getModel(),
+      characterModel: CharacterModel.getModel(),
     };
   }
 

@@ -3,25 +3,31 @@ import {
   StandardContainer,
   StandardContainerConfig,
 } from "../../libs/gameObjects/StandardContainer";
-import { PhysicEngine } from "../../libs/utils/PhysicEngine";
-import { Body } from "matter-js";
+import { PhysicEngine } from "../../libs/physic/PhysicEngine";
+import { IPhysicBody } from "../../libs/physic/IPhysicBody";
+// import { Body } from "matter-js";
 
 interface CharacterConfig extends StandardContainerConfig {
   physicEngine: PhysicEngine;
   characterSize: { w: number; h: number };
+  maxJumps: number;
 }
 
 const JUMP_Y_FORCE = -0.5;
+const characterFixedX = 300;
 
 export class Character extends StandardContainer<CharacterConfig> {
-  private _body!: Body;
+  private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
+  private _fixedX = characterFixedX;
+  private _jumps = 0;
 
   public build(): void {
     super.build();
 
-    const { physicEngine, characterSize } = this._config;
+    const { physicEngine, characterSize, x } = this._config;
     this._physicEngine = physicEngine;
+    this._fixedX = x || characterFixedX;
 
     const playerW = characterSize.w;
     const playerH = characterSize.h;
@@ -30,9 +36,6 @@ export class Character extends StandardContainer<CharacterConfig> {
     playerView.pivot.x = playerW / 2;
     playerView.pivot.y = playerH / 2;
     this.addChild(playerView);
-
-    this.x = 300;
-    this.y = 0;
 
     this._applyPhysic(playerView, physicEngine);
   }
@@ -49,24 +52,33 @@ export class Character extends StandardContainer<CharacterConfig> {
 
     // const width = body.bounds.max.x - body.bounds.min.x;
     // const height = body.bounds.max.y - body.bounds.min.y;
-    // console.log(width, height);
 
     physicEngine.disableInertia(body);
+
+    body.collideSignal.add(this._onCollide, this);
+  }
+
+  private _onCollide(): void {
+    this._jumps = 0;
   }
 
   public switchStaticBody(isStatic: boolean): void {
     this._body.isStatic = isStatic;
   }
 
+  public jump(): void {
+    if (this._jumps < this._config.maxJumps) {
+      this._jumps++;
+      this._physicEngine.applyForce(this._body, { x: 0, y: JUMP_Y_FORCE });
+    }
+  }
+
   public update(dt: number): void {
     super.update(dt);
 
+    this._physicEngine.correctionBodyX(this._body, this._fixedX);
     this.x = this._body.position.x;
     this.y = this._body.position.y;
     this.rotation = this._body.angle;
-  }
-
-  public jump(): void {
-    this._physicEngine.applyForce(this._body, { x: 0, y: JUMP_Y_FORCE });
   }
 }

@@ -1,5 +1,3 @@
-import { BaseModel } from "../libs/models/BaseModel";
-
 export enum PlatformTypes {
   big = "big",
   small = "small",
@@ -20,7 +18,16 @@ export interface IPlatformSetting {
   number: BigPlatformSizes;
 }
 
-export class PlatformsModel extends BaseModel {
+export class PlatformsModel {
+  static instance: PlatformsModel;
+  static getModel(): PlatformsModel {
+    if (!PlatformsModel.instance) {
+      PlatformsModel.instance = new PlatformsModel();
+    }
+
+    return PlatformsModel.instance;
+  }
+
   public readonly sizePlatformTile = 96;
   public readonly sizes = [
     BigPlatformSizes.ONE,

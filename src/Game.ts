@@ -6,7 +6,7 @@ import { AssetsLoader } from "./libs/utils/AssetsLoader";
 import { GameViewFactory } from "./factories/GameViewFactory";
 import { PlatformsModel } from "./models/PlatformsModel";
 import { BaseGameController } from "./controllers/BaseGameController";
-import { PhysicEngine } from "./libs/utils/PhysicEngine";
+import { PhysicEngine } from "./libs/physic/PhysicEngine";
 import { UserInteractionDispatcher } from "./libs/utils/UserInteractionDispatcher";
 import { CharacterModel } from "./models/CharacterModel";
 

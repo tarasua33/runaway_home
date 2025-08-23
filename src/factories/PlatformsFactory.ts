@@ -6,7 +6,7 @@ import {
   Platform,
   PlatformConfig,
 } from "../view/platforms/Platform";
-import { PhysicEngine } from "../libs/utils/PhysicEngine";
+import { PhysicEngine } from "../libs/physic/PhysicEngine";
 
 interface IBuildConfig {
   physicEngine: PhysicEngine;

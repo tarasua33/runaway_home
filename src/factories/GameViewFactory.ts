@@ -1,6 +1,6 @@
 import { AbstractBaseFactory } from "../libs/factories/AbstractBaseFactory";
 import { StandardContainer } from "../libs/gameObjects/StandardContainer";
-import { PhysicEngine } from "../libs/utils/PhysicEngine";
+import { PhysicEngine } from "../libs/physic/PhysicEngine";
 import { Character } from "../view/character/Character";
 
 import { IPlatforms } from "../view/platforms/Platform";

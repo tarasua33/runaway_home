@@ -8,8 +8,9 @@ import {
   StandardTilingSpriteConfig,
 } from "../../libs/gameObjects/StandardTillingSprite";
 import { BigPlatformSizes, PlatformTypes } from "../../models/PlatformsModel";
-import { PhysicEngine } from "../../libs/utils/PhysicEngine";
-import { Body } from "matter-js";
+import { PhysicEngine } from "../../libs/physic/PhysicEngine";
+import { IPhysicBody } from "../../libs/physic/IPhysicBody";
+// import { Body } from "matter-js";
 
 export interface PlatformConfig extends StandardContainerConfig {
   tileConfig: StandardTilingSpriteConfig;
@@ -27,7 +28,7 @@ const OFFSET = 10;
 export class Platform extends StandardContainer<PlatformConfig> {
   private _typePlt!: PlatformTypes;
   private _sizePlt!: BigPlatformSizes;
-  private _body!: Body;
+  private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
 
   public build(): void {
