@@ -1,6 +1,6 @@
 import { GAME_DIMENSIONS } from "../../Game";
 import { BaseStep, BaseStepParams } from "../../libs/controllers/BaseStep";
-import { getPositionY } from "../../libs/utils/GameHelper";
+import { getPositionY, IPlatformData } from "../../libs/utils/GameHelper";
 import { BigPlatformSizes, PlatformTypes } from "../../models/PlatformsModel";
 import { IPlatforms, Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
@@ -8,11 +8,6 @@ import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContaine
 export interface SetStartPositionsPlatformsStepParams extends BaseStepParams {
   platforms: IPlatforms;
   platformContainer: PlatformMoveContainer;
-}
-
-interface IPlatformData {
-  size: number;
-  number: number;
 }
 
 const MAX_SIDE_PLATFORMS = 10;
@@ -149,7 +144,7 @@ export class SetStartPositionsPlatformsStep<
       .pop()!;
 
     plt.setPosition(
-      0,
+      100,
       Math.round(GAME_DIMENSIONS.height * (3 / 4) + sizePlatformTile / 2),
     );
 

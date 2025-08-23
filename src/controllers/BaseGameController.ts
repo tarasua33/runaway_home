@@ -1,7 +1,10 @@
 import { IGameView } from "../factories/GameViewFactory";
 import { Controller, IControllerParams } from "../libs/controllers/Controller";
 import { Sequence } from "../libs/controllers/Sequence";
-// import { IPlatforms } from "../view/platforms/Platform";
+import { UserInteractionDispatcher } from "../libs/utils/UserInteractionDispatcher";
+import { JumpStep } from "./steps/JumpStep";
+import { PlayerActionListeningStep } from "./steps/PlayerActionListeningStep";
+
 import {
   SetStartPositionsPlatformsStep,
   SetStartPositionsPlatformsStepParams,
@@ -10,24 +13,27 @@ import { UpdatePlatformsStep } from "./steps/UpdatePlatformsStep";
 
 interface IControllerBaseParams extends IControllerParams {
   gameView: IGameView;
+  userInteractionDispatcher: UserInteractionDispatcher;
 }
 
 export class BaseGameController extends Controller<IControllerBaseParams> {
   _updatePlatformsStep: UpdatePlatformsStep;
+  _playerActionListeningStep: PlayerActionListeningStep;
   // private _platforms!: IPlatforms;
-  // private _gameView!: IGameView;
+  private _gameView!: IGameView;
 
   constructor() {
     super();
 
     this._updatePlatformsStep = new UpdatePlatformsStep();
+    this._playerActionListeningStep = new PlayerActionListeningStep();
   }
 
   public start(params: IControllerBaseParams): void {
-    // const models = this._models;
-    const { gameView } = (this._params = params);
-    // this._gameView = gameView;
-    // this._platforms = gameView.platforms;
+    const { gameView, userInteractionDispatcher } = (this._params = params);
+    this._gameView = gameView;
+
+    this._playerActionListeningStep.pointerDownSignal.add(this._onJump, this);
 
     const startSequence = new Sequence();
     // CONSEQUENCES
@@ -43,9 +49,23 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     startSequence.addPermanent(this._updatePlatformsStep, {
       platforms: gameView.platforms,
       platformContainer: gameView.platformMoveContainer,
-      characterContainer: gameView.characterContainer,
+      character: gameView.character,
+    });
+
+    startSequence.addPermanent(this._playerActionListeningStep, {
+      userInteractionDispatcher,
     });
 
     this._mng.start([startSequence]);
+  }
+
+  private _onJump(): void {
+    this._mng.addDynamicStep(new JumpStep(), {
+      character: this._gameView.character,
+    });
+  }
+
+  protected _onComplete(): void {
+    this._playerActionListeningStep.pointerDownSignal.removeAll();
   }
 }

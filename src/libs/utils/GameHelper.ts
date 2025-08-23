@@ -12,6 +12,11 @@ export interface IRect {
   h: number;
 }
 
+export interface IPlatformData {
+  size: number;
+  number: number;
+}
+
 export function getPositionY(
   previousPlt: IPoint,
   sizeBetween: number,

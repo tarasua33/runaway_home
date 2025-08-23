@@ -78,7 +78,7 @@ export class Platform extends StandardContainer<PlatformConfig> {
     this.x = body.position.x;
     this.y = body.position.y;
 
-    console.log("SET!!!!!!!!", this.x, this.y);
+    // console.log("SET!!!!!!!!", this.x, this.y);
   }
 
   public get sizePlt(): BigPlatformSizes {

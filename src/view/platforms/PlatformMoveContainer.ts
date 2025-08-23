@@ -9,7 +9,7 @@ export class PlatformMoveContainer extends StandardContainer {
   public readonly getNewPlatformSignal = new Signal();
 
   private _platforms!: Platform[];
-  private _speed = 1;
+  private _speed = 3;
   private _isPlay = false;
 
   public setSpeed(speed: number): void {

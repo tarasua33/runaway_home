@@ -7,6 +7,8 @@ import { GameViewFactory } from "./factories/GameViewFactory";
 import { PlatformsModel } from "./models/PlatformsModel";
 import { BaseGameController } from "./controllers/BaseGameController";
 import { PhysicEngine } from "./libs/utils/PhysicEngine";
+import { UserInteractionDispatcher } from "./libs/utils/UserInteractionDispatcher";
+import { CharacterModel } from "./models/CharacterModel";
 
 const widthGame = 1280;
 const heightGame = 720;
@@ -19,15 +21,18 @@ export const GAME_DIMENSIONS = {
 
 export interface IModels {
   platformsModel: PlatformsModel;
+  characterModel: CharacterModel;
 }
 
 export class Game {
   private _stage: Container;
+  private _view: HTMLCanvasElement;
   private _mainScene!: MainScene;
   private _physicEngine!: PhysicEngine;
 
-  constructor(stage: Container) {
+  constructor(stage: Container, view: HTMLCanvasElement) {
     this._stage = stage;
+    this._view = view;
 
     const mainScene = (this._mainScene = new MainScene({}));
     mainScene.build();
@@ -55,12 +60,15 @@ export class Game {
     const physicEngine = PhysicEngine.getEngine();
     this._physicEngine = physicEngine;
 
+    const userInteractionDispatcher = new UserInteractionDispatcher(this._view);
+
     const gameViewFactory = new GameViewFactory();
     const gameView = gameViewFactory.buildUi({ mainScene, physicEngine });
 
     const baseGameController = new BaseGameController();
     baseGameController.start({
       gameView,
+      userInteractionDispatcher,
     });
 
     return true;

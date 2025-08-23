@@ -17,7 +17,7 @@ import { Game, GAME_DIMENSIONS } from "./Game";
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  const game = new Game(app.stage);
+  const game = new Game(app.stage, app.canvas);
 
   const resize = () => {
     const vw = window.innerWidth;

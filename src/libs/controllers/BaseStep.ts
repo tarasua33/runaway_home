@@ -1,4 +1,5 @@
 import { IModels } from "../../Game";
+import { CharacterModel } from "../../models/CharacterModel";
 import { PlatformsModel } from "../../models/PlatformsModel";
 import { Signal } from "../utils/Signal";
 
@@ -16,6 +17,7 @@ export abstract class BaseStep<T extends BaseStepParams = BaseStepParams> {
   constructor() {
     this._models = {
       platformsModel: PlatformsModel.getModel<PlatformsModel>(PlatformsModel),
+      characterModel: CharacterModel.getModel<CharacterModel>(CharacterModel),
     };
   }
 
