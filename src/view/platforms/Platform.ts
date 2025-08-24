@@ -28,6 +28,7 @@ export class Platform extends StandardContainer<PlatformConfig> {
   private _sizePlt!: BigPlatformSizes;
   private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
+  private _isWinPlatform = false;
 
   public build(): void {
     const { tileConfig, typeCnf, sizeCnf, physicEngine, platformID } =
@@ -80,6 +81,14 @@ export class Platform extends StandardContainer<PlatformConfig> {
     this.y = body.position.y;
 
     // console.log("SET!!!!!!!!", this.x, this.y);
+  }
+
+  public get isWinPlatform(): boolean {
+    return this._isWinPlatform;
+  }
+
+  public set isWinPlatform(val: boolean) {
+    this._isWinPlatform = val;
   }
 
   public get sizePlt(): BigPlatformSizes {

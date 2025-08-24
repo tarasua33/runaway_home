@@ -8,7 +8,7 @@ import { ScreenFadeInStep } from "./steps/ScreenFadeInStep";
 
 interface IControllerBaseParams extends IControllerParams {
   gameView: IGameView;
-  success: boolean;
+  title: string;
 }
 
 export class TransitionController extends Controller<IControllerBaseParams> {
@@ -23,13 +23,13 @@ export class TransitionController extends Controller<IControllerBaseParams> {
   }
 
   public start(params: IControllerBaseParams): void {
-    const { gameView, success } = (this._params = params);
+    const { gameView, title } = (this._params = params);
 
     const baseSequence = new Sequence();
     // 1
     baseSequence.addStepByStep(this._screenFadeInStep, {
       screen: gameView.transitionsScreen as IFadeIn,
-      title: success ? "New Lvl" : "Try Again",
+      title: title,
     });
     // 2
     baseSequence.addStepByStep(this._resetGameStep, {

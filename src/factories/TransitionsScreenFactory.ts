@@ -22,7 +22,8 @@ export class TransitionsScreenFactory extends AbstractStandardFactory<Transition
         text: "Try Again!",
         styleOptions: {
           fontFamily: "Verdana, sans-serif",
-          fontSize: 120,
+          fontSize: 80,
+          align: "center",
           fontWeight: "bolder",
           fill: new FillGradient({
             type: "linear",

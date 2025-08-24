@@ -2,7 +2,7 @@ import {
   BaseStep,
   BaseStepParams,
 } from "../../libs/controllers/steps/BaseStep";
-import { IPlatforms } from "../../models/PlatformsModel";
+import { BigPlatformSizes, IPlatforms } from "../../models/PlatformsModel";
 import { Character } from "../../view/character/Character";
 import { Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
@@ -33,7 +33,14 @@ export class ResetGameStep<
 
   private _onPlatformRemoved(plt: Platform): void {
     plt.setPosition(-2000, 0);
-    this._params.platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
+    if (plt.isWinPlatform) {
+      this._params.platforms
+        .get(plt.typePlt)!
+        .get(BigPlatformSizes.WIN)!
+        .push(plt);
+    } else {
+      this._params.platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
+    }
   }
 
   protected _onComplete(): void {

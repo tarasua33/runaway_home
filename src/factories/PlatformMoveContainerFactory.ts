@@ -8,7 +8,9 @@ interface IBuildConfig {
 
 export class PlatformMoveContainerFactory extends AbstractStandardFactory<PlatformMoveContainer> {
   public buildUi({ parent }: IBuildConfig): PlatformMoveContainer {
-    const platformMoveContainer = new PlatformMoveContainer({});
+    const platformMoveContainer = new PlatformMoveContainer({
+      characterX: this._models.characterModel.characterX,
+    });
     platformMoveContainer.build();
     parent.addChild(platformMoveContainer);
 

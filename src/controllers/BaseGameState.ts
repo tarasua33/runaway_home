@@ -12,6 +12,12 @@ interface ISTateParams {
   physicEngine: PhysicEngine;
 }
 
+const PHRASES = {
+  WELCOME: "Let's get started!",
+  REPLAY: "Try again",
+  NEXT_LVL: "You win!\nGet ready for level",
+};
+
 export class BaseGameState extends BaseState {
   private _baseGameController!: BaseGameController;
   private _transitionController!: TransitionController;
@@ -33,7 +39,7 @@ export class BaseGameState extends BaseState {
       physicEngine,
     ));
 
-    const OVERWRITE_LVL = 5;
+    const OVERWRITE_LVL = 1;
     this._models.platformsModel.setUpLvl(OVERWRITE_LVL, gameView.platforms);
 
     // // START BASE GAME CONTROLLERS
@@ -47,6 +53,7 @@ export class BaseGameState extends BaseState {
       gameView,
       userInteractionDispatcher,
       gameLoaded: true,
+      title: PHRASES.WELCOME,
     });
   }
 
@@ -57,9 +64,12 @@ export class BaseGameState extends BaseState {
     const transitionController = this._transitionController;
     transitionController.completeStepSignal.addOnce(this._restartGame, this);
 
+    const pltModel = this._models.platformsModel;
     transitionController.start({
       gameView: this._gameView,
-      success,
+      title: this._success
+        ? PHRASES.NEXT_LVL + ` ${pltModel.lvl + 1}`
+        : PHRASES.REPLAY,
     });
   }
 
@@ -80,6 +90,9 @@ export class BaseGameState extends BaseState {
       gameView: this._gameView,
       userInteractionDispatcher: this._userInteractionDispatcher,
       gameLoaded: false,
+      title: this._success
+        ? PHRASES.NEXT_LVL + ` ${pltModel.lvl}`
+        : PHRASES.REPLAY,
     });
   }
 
@@ -95,15 +108,4 @@ export class BaseGameState extends BaseState {
 
     return gameUI;
   }
-
-  // private _restartLvl(): void {
-  //   const baseGameController = this._baseGameController;
-  //   // const userInterfaceController = this._userInterfaceController;
-
-  //   baseGameController.completeStepSignal.removeAll();
-  // }
-
-  // private _onGameSuccess(): void {
-
-  // }
 }

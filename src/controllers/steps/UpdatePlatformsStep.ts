@@ -3,7 +3,12 @@ import {
   BaseStepParams,
 } from "../../libs/controllers/steps/BaseStep";
 import { getPlatformData, IPlatformData } from "../../libs/utils/GameHelper";
-import { IPlatforms, PlatformTypes } from "../../models/PlatformsModel";
+import { Signal } from "../../libs/utils/Signal";
+import {
+  BigPlatformSizes,
+  IPlatforms,
+  PlatformTypes,
+} from "../../models/PlatformsModel";
 import { Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
 
@@ -15,34 +20,66 @@ export interface UpdatePlatformsStepParams extends BaseStepParams {
 export class UpdatePlatformsStep<
   T extends UpdatePlatformsStepParams = UpdatePlatformsStepParams,
 > extends BaseStep<UpdatePlatformsStepParams> {
+  public readonly winSignal = new Signal();
+
+  private _nextAddWinPlatform = false;
+
   public start(params: T): void {
     const { platformContainer } = params;
     this._params = params;
+    this._nextAddWinPlatform = false;
 
+    platformContainer.awaitFinalSignal.addOnce(this._addNextWinPlatform, this);
     platformContainer.removePlatformSignal.add(this._onPlatformRemoved, this);
     platformContainer.getNewPlatformSignal.add(this._getNewPlatform, this);
   }
 
+  private _addNextWinPlatform(): void {
+    const platformContainer = this._params.platformContainer;
+    platformContainer.awaitFinalSignal.removeAll();
+    platformContainer.winSignal.addOnce(this._onWin, this);
+    this._nextAddWinPlatform = true;
+  }
+
+  private _onWin(): void {
+    this.winSignal.dispatch();
+  }
+
   private _onPlatformRemoved(plt: Platform): void {
     plt.setPosition(-2000, 0);
-    this._params.platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
+    if (plt.isWinPlatform) {
+      this._params.platforms
+        .get(plt.typePlt)!
+        .get(BigPlatformSizes.WIN)!
+        .push(plt);
+    } else {
+      this._params.platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
+    }
   }
 
   private _getNewPlatform(): void {
     const { platformContainer, platforms } = this._params;
+    let newPlt;
+    if (this._nextAddWinPlatform) {
+      const arr = platforms.get(PlatformTypes.big)!.get(BigPlatformSizes.WIN)!;
+      newPlt = arr.pop()!;
+      newPlt.isWinPlatform = true;
 
-    const platformBigData: IPlatformData[] = getPlatformData(
-      platforms,
-      PlatformTypes.big,
-    );
+      this._nextAddWinPlatform = false;
+    } else {
+      const platformBigData: IPlatformData[] = getPlatformData(
+        platforms,
+        PlatformTypes.big,
+      );
 
-    console.log(platformBigData);
+      console.log(platformBigData);
 
-    const data =
-      platformBigData[Math.floor(Math.random() * platformBigData.length)];
+      const data =
+        platformBigData[Math.floor(Math.random() * platformBigData.length)];
 
-    const arr = platforms.get(PlatformTypes.big)!.get(data.size)!;
-    const newPlt = arr.pop()!;
+      const arr = platforms.get(PlatformTypes.big)!.get(data.size)!;
+      newPlt = arr.pop()!;
+    }
 
     platformContainer.addPlatform(
       newPlt,
@@ -52,6 +89,8 @@ export class UpdatePlatformsStep<
 
   protected _onComplete(): void {
     const platformContainer = this._params.platformContainer;
+    platformContainer.awaitFinalSignal.removeAll();
+    platformContainer.winSignal.removeAll();
     platformContainer.removePlatformSignal.removeAll();
     platformContainer.getNewPlatformSignal.removeAll();
 

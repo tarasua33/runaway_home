@@ -27,6 +27,7 @@ interface IControllerBaseParams extends IControllerParams {
   gameView: IGameView;
   userInteractionDispatcher: UserInteractionDispatcher;
   gameLoaded: boolean;
+  title: string;
 }
 
 export class BaseGameController extends Controller<IControllerBaseParams> {
@@ -60,8 +61,8 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
   }
 
   public start(params: IControllerBaseParams): void {
-    const { gameView, userInteractionDispatcher, gameLoaded } = (this._params =
-      params);
+    const { gameView, userInteractionDispatcher, gameLoaded, title } =
+      (this._params = params);
     this._gameView = gameView;
     const lvlPlatforms = this._models.platformsModel.getPlatforms();
     this._playerActionListeningStep.pointerDownSignal.add(this._onJump, this);
@@ -72,7 +73,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     if (gameLoaded) {
       startSequence.addStepByStep(this._screenFadeInStep, {
         screen: gameView.transitionsScreen as IFadeIn,
-        title: "Let's start",
+        title,
       });
     }
     // 1
@@ -111,7 +112,9 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     const playSequence = new Sequence();
     // PERMANENT
     // 1
-    playSequence.addPermanent(this._updatePlatformsStep, {
+    const updatePlatformsStep = this._updatePlatformsStep;
+    updatePlatformsStep.winSignal.addOnce(this._onGameWin, this);
+    playSequence.addPermanent(updatePlatformsStep, {
       platforms: lvlPlatforms,
       platformContainer: gameView.platformMoveContainer,
       // character: gameView.character,
@@ -142,12 +145,15 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
   protected _onComplete(): void {
     this._listeningCharacterStep.completeStepSignal.removeAll();
     this._playerActionListeningStep.pointerDownSignal.removeAll();
-    this._updatePlatformsStep.forceComplete();
+
+    const updatePlatformsStep = this._updatePlatformsStep;
+    updatePlatformsStep.winSignal.removeAll();
+    updatePlatformsStep.forceComplete();
 
     super._onComplete();
   }
 
-  private _onGameFail(): void {
+  private _onStopGame(): void {
     const gameView = this._gameView;
     this._mng.addDynamicStep(this._stopGameStep, {
       platformMoveContainer: gameView.platformMoveContainer,
@@ -155,8 +161,18 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     });
 
     this.forceComplete();
+  }
+
+  private _onGameFail(): void {
+    this._onStopGame();
 
     this.completeStepSignal.dispatch(false);
+  }
+
+  private _onGameWin(): void {
+    this._onStopGame();
+
+    this.completeStepSignal.dispatch(true);
   }
 
   public forceComplete(): void {

@@ -15,7 +15,8 @@ interface IBuildConfig {
 export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
   public buildUi({ physicEngine }: IBuildConfig): IPlatforms {
     const assetsLoader = this._assetsLoader;
-    const platformSettings = this._models.platformsModel.platformStartSettings;
+    const { platformStartSettings: platformSettings, winPlatformSettings } =
+      this._models.platformsModel;
 
     const bigTile = assetsLoader.getTexture("tille_big");
     const tileSmall = assetsLoader.getTexture("tile");
@@ -42,6 +43,7 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
     platforms.set(
       PlatformTypes.big,
       new Map([
+        [BigPlatformSizes.WIN, []],
         [BigPlatformSizes.ONE, []],
         [BigPlatformSizes.TWO, []],
         [BigPlatformSizes.FOUR, []],
@@ -50,22 +52,16 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
         [BigPlatformSizes.TEN, []],
       ]),
     );
-    platforms.set(
-      PlatformTypes.small,
-      new Map([
-        [BigPlatformSizes.ONE, []],
-        [BigPlatformSizes.TWO, []],
-        [BigPlatformSizes.FOUR, []],
-        [BigPlatformSizes.SIX, []],
-        [BigPlatformSizes.EIGHT, []],
-        [BigPlatformSizes.TEN, []],
-      ]),
-    );
+    platforms.set(PlatformTypes.small, new Map([]));
 
     const randomX = -1000;
     const randomY = -500;
-    for (let i = 0; i < platformSettings.length; i++) {
-      const setting = platformSettings[i];
+
+    for (let i = 0; i <= platformSettings.length; i++) {
+      // eslint-disable-next-line prettier/prettier
+      const setting = i === platformSettings.length ? winPlatformSettings : platformSettings[i];
+      const sizeKey =
+        i === platformSettings.length ? BigPlatformSizes.WIN : setting.size;
 
       for (let j = 0; j < setting.number; j++) {
         const tileSize = setting.size;
@@ -91,7 +87,11 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
         plt.build();
         // parent.addChild(plt);
 
-        platforms.get(setting.type)!.get(setting.size)!.push(plt);
+        platforms.get(setting.type)!.get(sizeKey)!.push(plt);
+
+        if (i === platformSettings.length) {
+          console.warn(platforms);
+        }
       }
     }
 

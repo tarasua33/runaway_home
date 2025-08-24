@@ -16,8 +16,10 @@ export class SetLvlSettingsStep<
   public start(params: T): void {
     const { platformMoveContainer } = params;
     // this._params = params;
-    const set = this._models.platformsModel.getLvlMechanicSettings();
+    const platformsModel = this._models.platformsModel;
+    const set = platformsModel.getLvlMechanicSettings();
     platformMoveContainer.setSpeed(set.speed);
+    platformMoveContainer.setLvlFinalDistance(set.finalDistance);
 
     this._onComplete();
   }

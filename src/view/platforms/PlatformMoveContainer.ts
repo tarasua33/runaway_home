@@ -1,19 +1,35 @@
 import { GAME_DIMENSIONS } from "../../Game";
-import { StandardContainer } from "../../libs/gameObjects/StandardContainer";
+import {
+  StandardContainer,
+  StandardContainerConfig,
+} from "../../libs/gameObjects/StandardContainer";
 import { getPositionY } from "../../libs/utils/GameHelper";
 import { Signal } from "../../libs/utils/Signal";
 import { Platform } from "./Platform";
 
-export class PlatformMoveContainer extends StandardContainer {
+interface PlatformMoveContainerConfig extends StandardContainerConfig {
+  characterX: number;
+}
+
+export class PlatformMoveContainer extends StandardContainer<PlatformMoveContainerConfig> {
+  public readonly winSignal = new Signal();
+  public readonly awaitFinalSignal = new Signal();
   public readonly removePlatformSignal = new Signal();
   public readonly getNewPlatformSignal = new Signal();
 
   private _platforms: Platform[] = [];
   private _speed = 3;
+  private _finalDistance = 0;
+  private _distance = 0;
   private _isPlay = false;
 
   public setSpeed(speed: number): void {
     this._speed = speed;
+  }
+
+  public setLvlFinalDistance(distance: number): void {
+    this._distance = 0;
+    this._finalDistance = distance;
   }
 
   public setPlatforms(platforms: Platform[]): void {
@@ -58,9 +74,14 @@ export class PlatformMoveContainer extends StandardContainer {
   }
 
   public update(dt: number): void {
+    let isWIn = false;
     if (this._isPlay) {
       for (const plt of this._platforms) {
         plt.setPosition(plt.x - this._speed, plt.y);
+
+        if (plt.isWinPlatform && plt.x <= this._config.characterX) {
+          isWIn = true;
+        }
       }
     }
 
@@ -85,6 +106,18 @@ export class PlatformMoveContainer extends StandardContainer {
       // eslint-disable-next-line prettier/prettier
       (GAME_DIMENSIONS.width + GAME_DIMENSIONS.halfWidth)) {
       this.getNewPlatformSignal.dispatch();
+    }
+
+    this._distance += this._speed;
+    if (this._distance > this._finalDistance) {
+      // to fix the problem of unsubscribing the signal in the same frame
+      this._distance = -GAME_DIMENSIONS.width * 10;
+
+      this.awaitFinalSignal.dispatch();
+    }
+
+    if (isWIn) {
+      this.winSignal.dispatch();
     }
   }
 }

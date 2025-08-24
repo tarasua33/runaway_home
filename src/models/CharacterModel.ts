@@ -1,4 +1,4 @@
-const characterX = 300;
+const characterX = 450;
 
 export class CharacterModel {
   static instance: CharacterModel;

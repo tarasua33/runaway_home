@@ -69,6 +69,7 @@ export class Character extends StandardContainer<CharacterConfig> {
       this._firstCollide = false;
       this.animationComplete.dispatch();
     }
+
     this._jumps = 0;
   }
 
