@@ -4,6 +4,7 @@ import { StandardContainer } from "../libs/gameObjects/StandardContainer";
 import { PhysicEngine } from "../libs/physic/PhysicEngine";
 import { BaseGameController } from "./BaseGameController";
 import { UserInteractionDispatcher } from "../libs/utils/UserInteractionDispatcher";
+import { TransitionController } from "./TransitionController";
 
 interface ISTateParams {
   userInteractionDispatcher: UserInteractionDispatcher;
@@ -12,8 +13,11 @@ interface ISTateParams {
 }
 
 export class BaseGameState extends BaseState {
-  // private _baseGameController!: BaseGameController;
-  // private _gameUI!: IGameView;
+  private _baseGameController!: BaseGameController;
+  private _transitionController!: TransitionController;
+
+  private _gameView!: IGameView;
+  private _userInteractionDispatcher!: UserInteractionDispatcher;
   // private _winLvl = false;
 
   public start({
@@ -21,14 +25,20 @@ export class BaseGameState extends BaseState {
     mainScene,
     physicEngine,
   }: ISTateParams): void {
-    // CREATE VIEW ELEMENTS
-    const gameView = this._buildGameObjects(mainScene, physicEngine);
+    this._userInteractionDispatcher = userInteractionDispatcher;
+
+    this._transitionController = new TransitionController();
+    const gameView = (this._gameView = this._buildGameObjects(
+      mainScene,
+      physicEngine,
+    ));
 
     // this._models.houseModel.reset();
     // this._models.boltsModel.reset();
 
     // // START BASE GAME CONTROLLERS
-    const baseGameController = new BaseGameController();
+    const baseGameController = (this._baseGameController =
+      new BaseGameController());
     baseGameController.completeStepSignal.addOnce(
       this._showTransitionScreen,
       this,
@@ -36,12 +46,34 @@ export class BaseGameState extends BaseState {
     baseGameController.start({
       gameView,
       userInteractionDispatcher,
+      gameLoaded: true,
     });
   }
 
   private _showTransitionScreen(success: boolean): void {
     // this._winLvl = success;
     console.log("GAME - //// - ", success);
+    const transitionController = this._transitionController;
+    transitionController.completeStepSignal.addOnce(this._restartGame, this);
+
+    transitionController.start({
+      gameView: this._gameView,
+      success,
+    });
+  }
+
+  private _restartGame(): void {
+    const baseGameController = this._baseGameController;
+
+    baseGameController.completeStepSignal.addOnce(
+      this._showTransitionScreen,
+      this,
+    );
+    baseGameController.start({
+      gameView: this._gameView,
+      userInteractionDispatcher: this._userInteractionDispatcher,
+      gameLoaded: false,
+    });
   }
 
   private _buildGameObjects(

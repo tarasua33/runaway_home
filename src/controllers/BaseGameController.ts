@@ -15,10 +15,17 @@ import {
 } from "./steps/StartPositionsPlatformsStep";
 import { StopGameStep } from "./steps/StopGameStep";
 import { UpdatePlatformsStep } from "./steps/UpdatePlatformsStep";
+import { ScreenFadeInStep } from "./steps/ScreenFadeInStep";
+import { IFadeIn, IFadeOut } from "../libs/utils/GameHelper";
+import {
+  ScreenFadeOutStep,
+  ScreenFadeOutStepParams,
+} from "./steps/ScreenFadeOutStep";
 
 interface IControllerBaseParams extends IControllerParams {
   gameView: IGameView;
   userInteractionDispatcher: UserInteractionDispatcher;
+  gameLoaded: boolean;
 }
 
 export class BaseGameController extends Controller<IControllerBaseParams> {
@@ -29,6 +36,8 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
   private _playGameStep: PlayGameStep;
   private _listeningCharacterStep: ListeningCharacterStep;
   private _stopGameStep!: StopGameStep;
+  private _screenFadeInStep: ScreenFadeInStep;
+  private _screenFadeOutStep: ScreenFadeOutStep;
 
   private _gameView!: IGameView;
 
@@ -41,34 +50,53 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     this._playGameStep = new PlayGameStep();
     this._listeningCharacterStep = new ListeningCharacterStep();
     this._stopGameStep = new StopGameStep();
+    this._screenFadeInStep = new ScreenFadeInStep();
+    this._screenFadeOutStep = new ScreenFadeOutStep();
 
     this._mng.completeSteps.removeAll();
   }
 
   public start(params: IControllerBaseParams): void {
-    const { gameView, userInteractionDispatcher } = (this._params = params);
+    const { gameView, userInteractionDispatcher, gameLoaded } = (this._params =
+      params);
     this._gameView = gameView;
 
     this._playerActionListeningStep.pointerDownSignal.add(this._onJump, this);
 
     const startSequence = new Sequence();
     // CONSEQUENCES
+    // 0
+    if (gameLoaded) {
+      startSequence.addStepByStep(this._screenFadeInStep, {
+        screen: gameView.transitionsScreen as IFadeIn,
+        title: "Let's start",
+      });
+    }
     // 1
+    startSequence.addStepByStep(new AwaitTimeStep(), {
+      delay: 1.0,
+    });
+    //2
     const SetStartPositionsStep = new SetStartPositionsPlatformsStep();
     const startStepParams: SetStartPositionsPlatformsStepParams = {
       platforms: gameView.platforms,
       platformContainer: gameView.platformMoveContainer,
     };
     startSequence.addStepByStep(SetStartPositionsStep, startStepParams);
-    // 2
+    // 3
+    startSequence.addStepByStep(this._screenFadeOutStep, {
+      screen: gameView.transitionsScreen as IFadeOut,
+      skipAwait: false,
+    } as ScreenFadeOutStepParams);
+    //4
     startSequence.addStepByStep(this._characterAppearStep, {
       character: gameView.character,
     });
-    // 3
+    // 5
     startSequence.addStepByStep(new AwaitTimeStep(), {
       delay: 0.5,
     });
-    //4
+    //6
     startSequence.addStepByStep(this._playGameStep, {
       platformMoveContainer: gameView.platformMoveContainer,
     });
@@ -113,8 +141,10 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
   }
 
   private _onGameFail(): void {
+    const gameView = this._gameView;
     this._mng.addDynamicStep(this._stopGameStep, {
-      platformMoveContainer: this._gameView.platformMoveContainer,
+      platformMoveContainer: gameView.platformMoveContainer,
+      character: gameView.character,
     });
 
     this.forceComplete();

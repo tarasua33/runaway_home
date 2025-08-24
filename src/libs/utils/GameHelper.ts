@@ -1,4 +1,16 @@
 import { GAME_DIMENSIONS } from "../../Game";
+import { Signal } from "./Signal";
+
+export interface IFadeIn {
+  show(): void;
+  animationComplete: Signal;
+  setText(txt: string): void;
+}
+
+export interface IFadeOut {
+  hide(): void;
+  animationComplete: Signal;
+}
 
 export interface IPoint {
   x: number;

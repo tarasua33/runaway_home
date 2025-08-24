@@ -8,7 +8,7 @@ export class PlatformMoveContainer extends StandardContainer {
   public readonly removePlatformSignal = new Signal();
   public readonly getNewPlatformSignal = new Signal();
 
-  private _platforms!: Platform[];
+  private _platforms: Platform[] = [];
   private _speed = 3;
   private _isPlay = false;
 
@@ -18,6 +18,7 @@ export class PlatformMoveContainer extends StandardContainer {
 
   public setPlatforms(platforms: Platform[]): void {
     for (const plt of platforms) {
+      plt.visible = true;
       this.addChild(plt);
     }
 
@@ -31,6 +32,7 @@ export class PlatformMoveContainer extends StandardContainer {
     const x = previousPlt.x + previousPlt.width / 2 + newPlt.width / 2 + offset;
     const y = getPositionY(previousPlt, offset, newPlt.height);
 
+    newPlt.visible = true;
     newPlt.setPosition(x, y);
 
     platforms.push(newPlt);
@@ -45,6 +47,16 @@ export class PlatformMoveContainer extends StandardContainer {
     this._isPlay = false;
   }
 
+  public returnPlatforms(): void {
+    const platforms = this._platforms;
+    while (platforms.length > 0) {
+      const plt = this._platforms.shift()!;
+      plt.visible = false;
+      this.removeChild(plt);
+      this.removePlatformSignal.dispatch(plt);
+    }
+  }
+
   public update(dt: number): void {
     if (this._isPlay) {
       for (const plt of this._platforms) {
@@ -54,12 +66,16 @@ export class PlatformMoveContainer extends StandardContainer {
 
     super.update(dt);
 
+    if (this._platforms.length === 0) {
+      return;
+    }
+
     if (
       this._platforms[0].x <
       -(GAME_DIMENSIONS.halfWidth + this._platforms[0].width)
     ) {
       const plt = this._platforms.shift()!;
-
+      plt.visible = false;
       this.removeChild(plt);
       this.removePlatformSignal.dispatch(plt);
     }

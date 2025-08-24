@@ -14,6 +14,7 @@ export class CharacterFactory extends AbstractStandardFactory<Character> {
     const { characterSize, startPosition, maxJumps } =
       this._models.characterModel;
     const character = new Character({
+      visible: false,
       physicEngine,
       characterSize: characterSize,
       x: startPosition.x,

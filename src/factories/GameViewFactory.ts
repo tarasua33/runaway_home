@@ -5,10 +5,12 @@ import { Character } from "../view/character/Character";
 
 import { IPlatforms } from "../view/platforms/Platform";
 import { PlatformMoveContainer } from "../view/platforms/PlatformMoveContainer";
+import { TransitionsScreen } from "../view/TransitionsScreen";
 import { CharacterContainerFactory } from "./CharacterContainerFactory";
 import { CharacterFactory } from "./CharacterFactory";
 import { PlatformMoveContainerFactory } from "./PlatformMoveContainerFactory";
 import { PlatformsFactory } from "./PlatformsFactory";
+import { TransitionsScreenFactory } from "./TransitionsScreenFactory";
 
 interface IBuildConfig {
   mainScene: StandardContainer;
@@ -20,6 +22,7 @@ export interface IGameView {
   platformMoveContainer: PlatformMoveContainer;
   characterContainer: StandardContainer;
   character: Character;
+  transitionsScreen: TransitionsScreen;
 }
 
 export class GameViewFactory extends AbstractBaseFactory {
@@ -30,6 +33,7 @@ export class GameViewFactory extends AbstractBaseFactory {
     const platformMoveContainerFactory = new PlatformMoveContainerFactory();
     const characterContainerFactory = new CharacterContainerFactory();
     const characterFactory = new CharacterFactory();
+    const transitionsScreenFactory = new TransitionsScreenFactory();
 
     const platformMoveContainer = platformMoveContainerFactory.buildUi({
       parent: mainScene,
@@ -45,6 +49,9 @@ export class GameViewFactory extends AbstractBaseFactory {
       character: characterFactory.buildUi({
         parent: characterContainer,
         physicEngine,
+      }),
+      transitionsScreen: transitionsScreenFactory.buildUi({
+        parent: mainScene,
       }),
     };
 

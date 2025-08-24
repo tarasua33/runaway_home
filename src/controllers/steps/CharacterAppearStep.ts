@@ -12,6 +12,9 @@ export class CharacterAppearStep<
   T extends CharacterAppearStepParams = CharacterAppearStepParams,
 > extends BaseStep<CharacterAppearStepParams> {
   public start({ character }: T): void {
+    const pos = this._models.characterModel.startPosition;
+    character.visible = true;
+    character.setPosition(pos.x, pos.y);
     character.animationComplete.addOnce(this._onComplete, this);
     character.switchStaticBody(false);
   }

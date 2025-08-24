@@ -1,5 +1,5 @@
 import { BaseStep, BaseStepParams } from "./BaseStep";
-import gsap from "gsap";
+import { gsap } from "gsap";
 
 export interface AwaitTimeStepParams extends BaseStepParams {
   delay: number;

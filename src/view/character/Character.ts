@@ -95,4 +95,20 @@ export class Character extends StandardContainer<CharacterConfig> {
       this.failSignal.dispatch();
     }
   }
+
+  public setPosition(x: number, y: number): void {
+    const body = this._body;
+
+    this._physicEngine.setPosition(body, x, y);
+
+    this.x = body.position.x;
+    this.y = body.position.y;
+
+    // console.log("SET!!!!!!!!", this.x, this.y);
+  }
+
+  public reset(): void {
+    this._jumps = 0;
+    this._firstCollide = true;
+  }
 }

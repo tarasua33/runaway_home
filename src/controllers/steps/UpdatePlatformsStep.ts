@@ -4,7 +4,6 @@ import {
 } from "../../libs/controllers/steps/BaseStep";
 import { IPlatformData } from "../../libs/utils/GameHelper";
 import { PlatformTypes } from "../../models/PlatformsModel";
-// import { Character } from "../../view/character/Character";
 import { IPlatforms, Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
 
@@ -22,8 +21,6 @@ export class UpdatePlatformsStep<
 
     platformContainer.removePlatformSignal.add(this._onPlatformRemoved, this);
     platformContainer.getNewPlatformSignal.add(this._getNewPlatform, this);
-
-    // character.switchStaticBody(false);
   }
 
   private _onPlatformRemoved(plt: Platform): void {

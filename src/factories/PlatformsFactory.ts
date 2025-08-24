@@ -72,6 +72,7 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
         const tileParam = tilesParams[setting.type];
 
         const conf: PlatformConfig = {
+          visible: false,
           tileConfig: {
             anchor: { x: 0.5, y: 0.5 },
             texture: tileParam.texture,
