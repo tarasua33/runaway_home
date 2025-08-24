@@ -104,8 +104,6 @@ export class Character extends StandardContainer<CharacterConfig> {
 
     this.x = body.position.x;
     this.y = body.position.y;
-
-    // console.log("SET!!!!!!!!", this.x, this.y);
   }
 
   public reset(): void {

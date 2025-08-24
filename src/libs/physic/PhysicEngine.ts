@@ -64,7 +64,6 @@ export class PhysicEngine {
   }
 
   public update(deltaMS: number): void {
-    // console.debug(deltaMS);
     // const fixedDelta = 1000 / 60;
     // const correction = deltaMS / fixedDelta;
     Engine.update(this.engine, deltaMS, 3);

@@ -42,8 +42,6 @@ export class SetStartPositionsPlatformsStep<
       platformStartY,
     );
 
-    console.warn(platformBigData);
-
     previousPlt = startPlt;
 
     this._createLeftPlatforms(

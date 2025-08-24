@@ -72,8 +72,6 @@ export class UpdatePlatformsStep<
         PlatformTypes.big,
       );
 
-      console.log(platformBigData);
-
       const data =
         platformBigData[Math.floor(Math.random() * platformBigData.length)];
 

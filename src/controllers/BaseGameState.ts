@@ -60,7 +60,6 @@ export class BaseGameState extends BaseState {
   private _showTransitionScreen(success: boolean): void {
     this._success = success;
 
-    console.log("GAME - //// - ", success);
     const transitionController = this._transitionController;
     transitionController.completeStepSignal.addOnce(this._restartGame, this);
 

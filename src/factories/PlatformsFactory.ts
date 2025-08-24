@@ -88,10 +88,6 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
         // parent.addChild(plt);
 
         platforms.get(setting.type)!.get(sizeKey)!.push(plt);
-
-        if (i === platformSettings.length) {
-          console.warn(platforms);
-        }
       }
     }
 

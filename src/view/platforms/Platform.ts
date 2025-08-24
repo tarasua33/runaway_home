@@ -52,8 +52,6 @@ export class Platform extends StandardContainer<PlatformConfig> {
 
     this.cacheAsTexture(true);
 
-    // console.log(this.width, this.height);
-
     this._applyPhysic(physicEngine);
   }
 
@@ -66,10 +64,8 @@ export class Platform extends StandardContainer<PlatformConfig> {
     }));
     body.isStatic = true;
     physicEngine.addBody(body);
-
-    const width = body.bounds.max.x - body.bounds.min.x;
-    const height = body.bounds.max.y - body.bounds.min.y;
-    console.log(width, height);
+    // const width = body.bounds.max.x - body.bounds.min.x;
+    // const height = body.bounds.max.y - body.bounds.min.y;
   }
 
   public setPosition(x: number, y: number): void {
@@ -79,8 +75,6 @@ export class Platform extends StandardContainer<PlatformConfig> {
 
     this.x = body.position.x;
     this.y = body.position.y;
-
-    // console.log("SET!!!!!!!!", this.x, this.y);
   }
 
   public get isWinPlatform(): boolean {
