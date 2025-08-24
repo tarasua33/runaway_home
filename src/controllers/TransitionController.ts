@@ -33,7 +33,7 @@ export class TransitionController extends Controller<IControllerBaseParams> {
     });
     // 2
     baseSequence.addStepByStep(this._resetGameStep, {
-      platforms: gameView.platforms,
+      platforms: this._models.platformsModel.getPlatforms(),
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
     });

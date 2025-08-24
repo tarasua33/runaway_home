@@ -1,9 +1,9 @@
 import { AbstractBaseFactory } from "../libs/factories/AbstractBaseFactory";
 import { StandardContainer } from "../libs/gameObjects/StandardContainer";
 import { PhysicEngine } from "../libs/physic/PhysicEngine";
+import { IPlatforms } from "../models/PlatformsModel";
 import { Character } from "../view/character/Character";
 
-import { IPlatforms } from "../view/platforms/Platform";
 import { PlatformMoveContainer } from "../view/platforms/PlatformMoveContainer";
 import { TransitionsScreen } from "../view/TransitionsScreen";
 import { CharacterContainerFactory } from "./CharacterContainerFactory";

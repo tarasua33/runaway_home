@@ -3,9 +3,13 @@ import {
   BaseStep,
   BaseStepParams,
 } from "../../libs/controllers/steps/BaseStep";
-import { getPositionY, IPlatformData } from "../../libs/utils/GameHelper";
-import { BigPlatformSizes, PlatformTypes } from "../../models/PlatformsModel";
-import { IPlatforms, Platform } from "../../view/platforms/Platform";
+import {
+  getPlatformData,
+  getPositionY,
+  IPlatformData,
+} from "../../libs/utils/GameHelper";
+import { IPlatforms, PlatformTypes } from "../../models/PlatformsModel";
+import { Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
 
 export interface SetStartPositionsPlatformsStepParams extends BaseStepParams {
@@ -20,18 +24,25 @@ export class SetStartPositionsPlatformsStep<
   T extends SetStartPositionsPlatformsStepParams = SetStartPositionsPlatformsStepParams,
 > extends BaseStep<SetStartPositionsPlatformsStepParams> {
   public start({ platforms, platformContainer }: T): void {
-    const { sizePlatformTile } = this._models.platformsModel;
+    const { sizePlatformTile, platformStartX, platformStartY } =
+      this._models.platformsModel;
     const platformsToAdd: Platform[] = [];
 
     let previousPlt;
 
-    const startPlt = this._getBasePlatform(platforms, sizePlatformTile);
-    // platformsToAdd.push(startPlt);
-
-    const platformBigData: IPlatformData[] = this._getPlatformData(
+    const platformBigData: IPlatformData[] = getPlatformData(
       platforms,
       PlatformTypes.big,
     );
+
+    const startPlt = this._getBasePlatform(
+      platforms,
+      platformBigData,
+      platformStartX,
+      platformStartY,
+    );
+
+    console.warn(platformBigData);
 
     previousPlt = startPlt;
 
@@ -138,33 +149,22 @@ export class SetStartPositionsPlatformsStep<
 
   private _getBasePlatform(
     platforms: IPlatforms,
-    sizePlatformTile: number,
+    platformBigData: IPlatformData[],
+    platformStartX: number,
+    platformStartY: number,
   ): Platform {
-    const plt = platforms
-      .get(PlatformTypes.big)!
-      .get(BigPlatformSizes.TEN)!
-      .pop()!;
+    const data = platformBigData[platformBigData.length - 1];
+    const arr = platforms.get(PlatformTypes.big)!.get(data.size)!;
+    const plt = arr.pop()!;
 
-    plt.setPosition(
-      100,
-      Math.round(GAME_DIMENSIONS.height * (3 / 4) + sizePlatformTile / 2),
-    );
-
-    return plt;
-  }
-
-  private _getPlatformData(
-    platforms: IPlatforms,
-    type: PlatformTypes,
-  ): IPlatformData[] {
-    const data = [];
-    for (const [key, value] of platforms.get(type)!.entries()) {
-      data.push({
-        size: key,
-        number: value.length,
-      });
+    data.number = arr.length;
+    if (arr.length === 0) {
+      const dataIdx = platformBigData.indexOf(data);
+      platformBigData.splice(dataIdx, 1);
     }
 
-    return data;
+    plt.setPosition(platformStartX, platformStartY);
+
+    return plt;
   }
 }

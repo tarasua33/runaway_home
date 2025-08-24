@@ -15,7 +15,7 @@ interface CharacterConfig extends StandardContainerConfig {
   failY: number;
 }
 
-const JUMP_Y_FORCE = -0.5;
+const JUMP_Y_FORCE = -0.45;
 const characterFixedX = 300;
 
 export class Character extends StandardContainer<CharacterConfig> {

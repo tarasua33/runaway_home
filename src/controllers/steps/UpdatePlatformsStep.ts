@@ -2,9 +2,9 @@ import {
   BaseStep,
   BaseStepParams,
 } from "../../libs/controllers/steps/BaseStep";
-import { IPlatformData } from "../../libs/utils/GameHelper";
-import { PlatformTypes } from "../../models/PlatformsModel";
-import { IPlatforms, Platform } from "../../view/platforms/Platform";
+import { getPlatformData, IPlatformData } from "../../libs/utils/GameHelper";
+import { IPlatforms, PlatformTypes } from "../../models/PlatformsModel";
+import { Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
 
 export interface UpdatePlatformsStepParams extends BaseStepParams {
@@ -31,7 +31,7 @@ export class UpdatePlatformsStep<
   private _getNewPlatform(): void {
     const { platformContainer, platforms } = this._params;
 
-    const platformBigData: IPlatformData[] = this._getPlatformData(
+    const platformBigData: IPlatformData[] = getPlatformData(
       platforms,
       PlatformTypes.big,
     );
@@ -48,23 +48,6 @@ export class UpdatePlatformsStep<
       newPlt,
       this._models.platformsModel.sizePlatformTile,
     );
-  }
-
-  private _getPlatformData(
-    platforms: IPlatforms,
-    type: PlatformTypes,
-  ): IPlatformData[] {
-    const data = [];
-    for (const [key, value] of platforms.get(type)!.entries()) {
-      if (value.length > 0) {
-        data.push({
-          size: key,
-          number: value.length,
-        });
-      }
-    }
-
-    return data;
   }
 
   protected _onComplete(): void {

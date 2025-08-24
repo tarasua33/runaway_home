@@ -17,22 +17,22 @@ export interface PlatformConfig extends StandardContainerConfig {
   typeCnf: PlatformTypes;
   sizeCnf: BigPlatformSizes;
   physicEngine: PhysicEngine;
+  platformID: string;
 }
-
-export type IPlatformsSizes = Map<BigPlatformSizes, Platform[]>;
-
-export type IPlatforms = Map<PlatformTypes, IPlatformsSizes>;
 
 const OFFSET = 10;
 
 export class Platform extends StandardContainer<PlatformConfig> {
+  public platformID!: string;
   private _typePlt!: PlatformTypes;
   private _sizePlt!: BigPlatformSizes;
   private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
 
   public build(): void {
-    const { tileConfig, typeCnf, sizeCnf, physicEngine } = this._config;
+    const { tileConfig, typeCnf, sizeCnf, physicEngine, platformID } =
+      this._config;
+    this.platformID = platformID;
     this._typePlt = typeCnf;
     this._sizePlt = sizeCnf;
     this._physicEngine = physicEngine;

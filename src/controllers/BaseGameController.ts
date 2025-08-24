@@ -21,6 +21,7 @@ import {
   ScreenFadeOutStep,
   ScreenFadeOutStepParams,
 } from "./steps/ScreenFadeOutStep";
+import { SetLvlSettingsStep } from "./steps/SetLvlSettingsStep";
 
 interface IControllerBaseParams extends IControllerParams {
   gameView: IGameView;
@@ -38,6 +39,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
   private _stopGameStep!: StopGameStep;
   private _screenFadeInStep: ScreenFadeInStep;
   private _screenFadeOutStep: ScreenFadeOutStep;
+  private _setLvlSettingsStep!: SetLvlSettingsStep;
 
   private _gameView!: IGameView;
 
@@ -52,6 +54,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     this._stopGameStep = new StopGameStep();
     this._screenFadeInStep = new ScreenFadeInStep();
     this._screenFadeOutStep = new ScreenFadeOutStep();
+    this._setLvlSettingsStep = new SetLvlSettingsStep();
 
     this._mng.completeSteps.removeAll();
   }
@@ -60,7 +63,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     const { gameView, userInteractionDispatcher, gameLoaded } = (this._params =
       params);
     this._gameView = gameView;
-
+    const lvlPlatforms = this._models.platformsModel.getPlatforms();
     this._playerActionListeningStep.pointerDownSignal.add(this._onJump, this);
 
     const startSequence = new Sequence();
@@ -73,30 +76,34 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       });
     }
     // 1
+    startSequence.addStepByStep(this._setLvlSettingsStep, {
+      platformMoveContainer: gameView.platformMoveContainer,
+    });
+    // 2
     startSequence.addStepByStep(new AwaitTimeStep(), {
       delay: 1.0,
     });
-    //2
+    // 3
     const SetStartPositionsStep = new SetStartPositionsPlatformsStep();
     const startStepParams: SetStartPositionsPlatformsStepParams = {
-      platforms: gameView.platforms,
+      platforms: lvlPlatforms,
       platformContainer: gameView.platformMoveContainer,
     };
     startSequence.addStepByStep(SetStartPositionsStep, startStepParams);
-    // 3
+    // 4
     startSequence.addStepByStep(this._screenFadeOutStep, {
       screen: gameView.transitionsScreen as IFadeOut,
       skipAwait: false,
     } as ScreenFadeOutStepParams);
-    //4
+    // 5
     startSequence.addStepByStep(this._characterAppearStep, {
       character: gameView.character,
     });
-    // 5
+    // 6
     startSequence.addStepByStep(new AwaitTimeStep(), {
       delay: 0.5,
     });
-    //6
+    // 7
     startSequence.addStepByStep(this._playGameStep, {
       platformMoveContainer: gameView.platformMoveContainer,
     });
@@ -105,7 +112,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     // PERMANENT
     // 1
     playSequence.addPermanent(this._updatePlatformsStep, {
-      platforms: gameView.platforms,
+      platforms: lvlPlatforms,
       platformContainer: gameView.platformMoveContainer,
       // character: gameView.character,
     });

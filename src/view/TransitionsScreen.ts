@@ -5,7 +5,7 @@ import {
 } from "../libs/gameObjects/StandardContainer";
 import { Signal } from "../libs/utils/Signal";
 import { IFadeIn, IFadeOut } from "../libs/utils/GameHelper";
-import { Bounce, Expo, Back, gsap } from "gsap";
+import { Bounce, Expo, Back, Sine, gsap } from "gsap";
 
 interface TransitionsScreenConfig extends StandardContainerConfig {
   bgX: number;
@@ -103,7 +103,9 @@ export class TransitionsScreen
   private set progress(value: number) {
     this._progress = value;
 
-    const alphaValue = Expo.easeOut(value);
+    const alphaValue = this._isFadeIn
+      ? Expo.easeOut(value)
+      : Sine.easeInOut(value);
     this.alpha =
       this._alphaFrom + (this._alphaTo - this._alphaFrom) * alphaValue;
 

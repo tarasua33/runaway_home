@@ -1,4 +1,5 @@
 import { GAME_DIMENSIONS } from "../../Game";
+import { IPlatforms, PlatformTypes } from "../../models/PlatformsModel";
 import { Signal } from "./Signal";
 
 export interface IFadeIn {
@@ -42,4 +43,21 @@ export function getPositionY(
   );
 
   return newY;
+}
+
+export function getPlatformData(
+  platforms: IPlatforms,
+  type: PlatformTypes,
+): IPlatformData[] {
+  const data = [];
+  for (const [key, value] of platforms.get(type)!.entries()) {
+    if (value.length > 0) {
+      data.push({
+        size: key,
+        number: value.length,
+      });
+    }
+  }
+
+  return data;
 }

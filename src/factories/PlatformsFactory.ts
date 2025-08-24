@@ -1,11 +1,11 @@
 import { Texture } from "pixi.js";
 import { AbstractStandardFactory } from "../libs/factories/AbstractStandardFactory";
-import { BigPlatformSizes, PlatformTypes } from "../models/PlatformsModel";
 import {
+  BigPlatformSizes,
   IPlatforms,
-  Platform,
-  PlatformConfig,
-} from "../view/platforms/Platform";
+  PlatformTypes,
+} from "../models/PlatformsModel";
+import { Platform, PlatformConfig } from "../view/platforms/Platform";
 import { PhysicEngine } from "../libs/physic/PhysicEngine";
 
 interface IBuildConfig {
@@ -15,7 +15,7 @@ interface IBuildConfig {
 export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
   public buildUi({ physicEngine }: IBuildConfig): IPlatforms {
     const assetsLoader = this._assetsLoader;
-    const platformSettings = this._models.platformsModel.platformSettings;
+    const platformSettings = this._models.platformsModel.platformStartSettings;
 
     const bigTile = assetsLoader.getTexture("tille_big");
     const tileSmall = assetsLoader.getTexture("tile");
@@ -72,6 +72,7 @@ export class PlatformsFactory extends AbstractStandardFactory<IPlatforms> {
         const tileParam = tilesParams[setting.type];
 
         const conf: PlatformConfig = {
+          platformID: `${setting.type}_${setting.size}_${i}${j}`,
           visible: false,
           tileConfig: {
             anchor: { x: 0.5, y: 0.5 },

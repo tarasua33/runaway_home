@@ -1,5 +1,6 @@
 import { Application } from "pixi.js";
 import { Game, GAME_DIMENSIONS } from "./Game";
+import Stats from "stats.js";
 
 (async () => {
   // Create a new application
@@ -44,9 +45,15 @@ import { Game, GAME_DIMENSIONS } from "./Game";
   const success = await game.init();
   // Listen for animate update
 
+  const stats = new Stats();
+  stats.showPanel(0);
+  document.body.appendChild(stats.dom);
+
   if (success) {
     app.ticker.add((time) => {
+      stats.begin();
       game.update(time.deltaTime, time.deltaMS);
+      stats.end();
     });
   }
 })();

@@ -2,8 +2,9 @@ import {
   BaseStep,
   BaseStepParams,
 } from "../../libs/controllers/steps/BaseStep";
+import { IPlatforms } from "../../models/PlatformsModel";
 import { Character } from "../../view/character/Character";
-import { IPlatforms, Platform } from "../../view/platforms/Platform";
+import { Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
 
 export interface ResetGameStepParams extends BaseStepParams {
@@ -36,9 +37,7 @@ export class ResetGameStep<
   }
 
   protected _onComplete(): void {
-    this._params.platformMoveContainer.removePlatformSignal.remove(
-      this._onPlatformRemoved,
-    );
+    this._params.platformMoveContainer.removePlatformSignal.removeAll();
 
     super._onComplete();
   }

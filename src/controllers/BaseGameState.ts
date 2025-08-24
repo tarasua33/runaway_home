@@ -18,7 +18,7 @@ export class BaseGameState extends BaseState {
 
   private _gameView!: IGameView;
   private _userInteractionDispatcher!: UserInteractionDispatcher;
-  // private _winLvl = false;
+  private _success: boolean = false;
 
   public start({
     userInteractionDispatcher,
@@ -33,8 +33,8 @@ export class BaseGameState extends BaseState {
       physicEngine,
     ));
 
-    // this._models.houseModel.reset();
-    // this._models.boltsModel.reset();
+    const OVERWRITE_LVL = 5;
+    this._models.platformsModel.setUpLvl(OVERWRITE_LVL, gameView.platforms);
 
     // // START BASE GAME CONTROLLERS
     const baseGameController = (this._baseGameController =
@@ -51,7 +51,8 @@ export class BaseGameState extends BaseState {
   }
 
   private _showTransitionScreen(success: boolean): void {
-    // this._winLvl = success;
+    this._success = success;
+
     console.log("GAME - //// - ", success);
     const transitionController = this._transitionController;
     transitionController.completeStepSignal.addOnce(this._restartGame, this);
@@ -64,6 +65,12 @@ export class BaseGameState extends BaseState {
 
   private _restartGame(): void {
     const baseGameController = this._baseGameController;
+
+    const pltModel = this._models.platformsModel;
+    pltModel.setUpLvl(
+      this._success ? pltModel.lvl + 1 : pltModel.lvl,
+      this._gameView.platforms,
+    );
 
     baseGameController.completeStepSignal.addOnce(
       this._showTransitionScreen,
