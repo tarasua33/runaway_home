@@ -37,7 +37,7 @@ export class TransitionsScreenFactory extends AbstractStandardFactory<Transition
             textureSpace: "local",
           }),
           dropShadow: {
-            distance: 10,
+            distance: 6,
             color: "#f6f673ff",
             blur: 1,
             alpha: 0.25,

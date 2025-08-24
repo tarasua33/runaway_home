@@ -1,5 +1,5 @@
-import { IModels } from "../../../Game";
 import { CharacterModel } from "../../../models/CharacterModel";
+import { IModels } from "../../../models/IModels";
 import { PlatformsModel } from "../../../models/PlatformsModel";
 import { Signal } from "../../utils/Signal";
 

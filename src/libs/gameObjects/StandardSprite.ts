@@ -1,15 +1,10 @@
 import { Sprite, SpriteOptions } from "pixi.js";
 import { IGameObject } from "./IGameObject";
+import { ITicker } from "../utils/ITicker";
 
 export interface StandardSpriteConfig extends SpriteOptions {
   x?: number;
   y?: number;
-  // rotX?: number;
-  // rotY?: number;
-  // rotZ?: number;
-  // scaleX?: number;
-  // scaleY?: number;
-  // scaleZ?: number;
   visible?: boolean;
 }
 
@@ -50,9 +45,9 @@ export class StandardSprite<T extends StandardSpriteConfig = StandardSpriteConfi
   // }
   // /* eslint-enable */
 
-  public update(dt: number): void {
+  public update(ticker: ITicker): void {
     for (const child of this.children as IGameObject[]) {
-      if (child.update) child.update(dt);
+      if (child.update) child.update(ticker);
     }
   }
 }

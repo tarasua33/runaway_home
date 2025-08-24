@@ -1,4 +1,3 @@
-import { Graphics } from "pixi.js";
 import {
   StandardContainer,
   StandardContainerConfig,
@@ -6,6 +5,11 @@ import {
 import { PhysicEngine } from "../../libs/physic/PhysicEngine";
 import { IPhysicBody } from "../../libs/physic/IPhysicBody";
 import { Signal } from "../../libs/utils/Signal";
+import { ITicker } from "../../libs/utils/ITicker";
+import {
+  StandardFramesAnimations,
+  StandardFramesAnimationsConfig,
+} from "../../libs/gameObjects/StandardFramesAnimations";
 // import { Body } from "matter-js";
 
 interface CharacterConfig extends StandardContainerConfig {
@@ -13,6 +17,7 @@ interface CharacterConfig extends StandardContainerConfig {
   characterSize: { w: number; h: number };
   maxJumps: number;
   failY: number;
+  playerConfig: StandardFramesAnimationsConfig;
 }
 
 const JUMP_Y_FORCE = -0.45;
@@ -21,7 +26,7 @@ const characterFixedX = 300;
 export class Character extends StandardContainer<CharacterConfig> {
   public readonly failSignal = new Signal();
   public readonly animationComplete = new Signal();
-
+  private _player!: StandardFramesAnimations;
   private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
   private _fixedX = characterFixedX;
@@ -31,27 +36,32 @@ export class Character extends StandardContainer<CharacterConfig> {
   public build(): void {
     super.build();
 
-    const { physicEngine, characterSize, x } = this._config;
+    const { physicEngine, characterSize, x, playerConfig } = this._config;
     this._physicEngine = physicEngine;
     this._fixedX = x || characterFixedX;
 
-    const playerW = characterSize.w;
-    const playerH = characterSize.h;
-    const playerView = new Graphics();
-    playerView.beginFill(0x00ff00).drawRect(0, 0, playerW, playerH).endFill();
-    playerView.pivot.x = playerW / 2;
-    playerView.pivot.y = playerH / 2;
-    this.addChild(playerView);
+    const player = (this._player = new StandardFramesAnimations(playerConfig));
+    player.build();
+    this.addChild(player);
 
-    this._applyPhysic(playerView, physicEngine);
+    player.playAnimation("idle", true);
+
+    this._applyPhysic(characterSize, physicEngine);
   }
 
-  private _applyPhysic(playerView: Graphics, physicEngine: PhysicEngine): void {
+  public start(): void {
+    this._player.playAnimation("run", true);
+  }
+
+  private _applyPhysic(
+    playerView: { w: number; h: number },
+    physicEngine: PhysicEngine,
+  ): void {
     const body = (this._body = physicEngine.createRectangleBody({
       x: this.x,
       y: this.y,
-      w: playerView.width,
-      h: playerView.height,
+      w: playerView.w,
+      h: playerView.h,
     }));
     body.isStatic = false;
     physicEngine.addBody(body);
@@ -68,6 +78,8 @@ export class Character extends StandardContainer<CharacterConfig> {
     if (this._firstCollide) {
       this._firstCollide = false;
       this.animationComplete.dispatch();
+    } else {
+      this._player.playAnimation("run", true);
     }
 
     this._jumps = 0;
@@ -81,11 +93,13 @@ export class Character extends StandardContainer<CharacterConfig> {
     if (this._jumps < this._config.maxJumps) {
       this._jumps++;
       this._physicEngine.applyForce(this._body, { x: 0, y: JUMP_Y_FORCE });
+
+      this._player.playAnimation("jump", true);
     }
   }
 
-  public update(dt: number): void {
-    super.update(dt);
+  public update(ticker: ITicker): void {
+    super.update(ticker);
 
     this._physicEngine.correctionBodyX(this._body, this._fixedX);
     this.x = this._body.position.x;
@@ -107,6 +121,7 @@ export class Character extends StandardContainer<CharacterConfig> {
   }
 
   public reset(): void {
+    this._player.playAnimation("idle", true);
     this._jumps = 0;
     this._firstCollide = true;
   }

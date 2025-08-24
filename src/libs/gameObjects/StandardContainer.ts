@@ -1,16 +1,10 @@
 import { Container, ContainerOptions } from "pixi.js";
 import { IGameObject } from "./IGameObject";
+import { ITicker } from "../utils/ITicker";
 
 export interface StandardContainerConfig extends ContainerOptions {
   x?: number;
   y?: number;
-  // z?: number;
-  // rotX?: number;
-  // rotY?: number;
-  // rotZ?: number;
-  // scaleX?: number;
-  // scaleY?: number;
-  // scaleZ?: number;
   visible?: boolean;
 }
 
@@ -51,9 +45,9 @@ export class StandardContainer<T extends StandardContainerConfig = StandardConta
   // }
   // /* eslint-enable */
 
-  public update(dt: number): void {
+  public update(ticker: ITicker | unknown): void {
     for (const child of this.children as IGameObject[]) {
-      if (child.update) child.update(dt);
+      if (child.update) child.update(ticker as ITicker);
     }
   }
 }

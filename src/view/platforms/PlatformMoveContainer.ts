@@ -4,6 +4,7 @@ import {
   StandardContainerConfig,
 } from "../../libs/gameObjects/StandardContainer";
 import { getPositionY } from "../../libs/utils/GameHelper";
+import { ITicker } from "../../libs/utils/ITicker";
 import { Signal } from "../../libs/utils/Signal";
 import { Platform } from "./Platform";
 
@@ -73,7 +74,7 @@ export class PlatformMoveContainer extends StandardContainer<PlatformMoveContain
     }
   }
 
-  public update(dt: number): void {
+  public update(ticker: ITicker): void {
     let isWIn = false;
     if (this._isPlay) {
       for (const plt of this._platforms) {
@@ -85,7 +86,7 @@ export class PlatformMoveContainer extends StandardContainer<PlatformMoveContain
       }
     }
 
-    super.update(dt);
+    super.update(ticker);
 
     if (this._platforms.length === 0) {
       return;

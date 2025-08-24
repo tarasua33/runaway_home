@@ -52,7 +52,7 @@ import Stats from "stats.js";
   if (success) {
     app.ticker.add((time) => {
       stats.begin();
-      game.update(time.deltaTime, time.deltaMS);
+      game.update(app.ticker, time.deltaMS);
       stats.end();
     });
   }

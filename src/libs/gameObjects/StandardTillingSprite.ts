@@ -1,5 +1,6 @@
 import { TilingSprite, TilingSpriteOptions } from "pixi.js";
 import { IGameObject } from "./IGameObject";
+import { ITicker } from "../utils/ITicker";
 
 export interface StandardTilingSpriteConfig extends TilingSpriteOptions {
   x?: number;
@@ -38,9 +39,9 @@ export class StandardTilingSprite<T extends StandardTilingSpriteConfig = Standar
     }
   }
 
-  public update(dt: number): void {
+  public update(ticker: ITicker): void {
     for (const child of this.children as IGameObject[]) {
-      if (child.update) child.update(dt);
+      if (child.update) child.update(ticker);
     }
   }
 }

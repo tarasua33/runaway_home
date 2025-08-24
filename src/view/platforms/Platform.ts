@@ -10,6 +10,7 @@ import {
 import { BigPlatformSizes, PlatformTypes } from "../../models/PlatformsModel";
 import { PhysicEngine } from "../../libs/physic/PhysicEngine";
 import { IPhysicBody } from "../../libs/physic/IPhysicBody";
+import { ITicker } from "../../libs/utils/ITicker";
 // import { Body } from "matter-js";
 
 export interface PlatformConfig extends StandardContainerConfig {
@@ -93,8 +94,8 @@ export class Platform extends StandardContainer<PlatformConfig> {
     return this._typePlt;
   }
 
-  public update(dt: number): void {
-    super.update(dt);
+  public update(ticker: ITicker): void {
+    super.update(ticker);
 
     this.x = this._body.position.x;
     this.y = this._body.position.y;

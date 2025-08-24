@@ -107,6 +107,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     // 7
     startSequence.addStepByStep(this._playGameStep, {
       platformMoveContainer: gameView.platformMoveContainer,
+      character: gameView.character,
     });
 
     const playSequence = new Sequence();

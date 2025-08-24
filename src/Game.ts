@@ -1,11 +1,10 @@
-import { Container, Text } from "pixi.js";
+import { Container, Text, Ticker } from "pixi.js";
 import { MainScene } from "./view/MainScene";
 import { AssetsLoader } from "./libs/utils/AssetsLoader";
-import { PlatformsModel } from "./models/PlatformsModel";
 import { PhysicEngine } from "./libs/physic/PhysicEngine";
-import { CharacterModel } from "./models/CharacterModel";
 import { BaseGameState } from "./controllers/BaseGameState";
 import { UserInteractionDispatcher } from "./libs/utils/UserInteractionDispatcher";
+import { ITicker } from "./libs/utils/ITicker";
 
 const widthGame = 1280;
 const heightGame = 720;
@@ -15,11 +14,6 @@ export const GAME_DIMENSIONS = {
   height: heightGame,
   halfWidth: widthGame / 2,
 };
-
-export interface IModels {
-  platformsModel: PlatformsModel;
-  characterModel: CharacterModel;
-}
 
 export class Game {
   private _stage: Container;
@@ -69,8 +63,8 @@ export class Game {
     return true;
   }
 
-  public update(dt: number, deltaMS: number): void {
-    this._mainScene.update(dt);
+  public update(ticker: Ticker, deltaMS: number): void {
+    this._mainScene.update(ticker as ITicker);
     if (this._physicEngine) this._physicEngine.update(deltaMS);
   }
 
