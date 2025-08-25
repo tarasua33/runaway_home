@@ -13,9 +13,9 @@ export class TransitionsScreenFactory extends AbstractStandardFactory<Transition
     const characterContainer = new TransitionsScreen({
       visible: false,
       bgX: -GAME_DIMENSIONS.width / 4,
-      bgY: -GAME_DIMENSIONS.height / 4,
+      bgY: -GAME_DIMENSIONS.halfWidth - GAME_DIMENSIONS.halfWidth / 2 + 50,
       bgW: GAME_DIMENSIONS.width + GAME_DIMENSIONS.halfWidth,
-      bgH: GAME_DIMENSIONS.height + GAME_DIMENSIONS.height / 2,
+      bgH: GAME_DIMENSIONS.width + GAME_DIMENSIONS.width,
       textY: GAME_DIMENSIONS.height / 3,
       textX: GAME_DIMENSIONS.width / 2,
       textConfig: {

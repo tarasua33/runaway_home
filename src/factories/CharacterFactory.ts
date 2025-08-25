@@ -42,7 +42,7 @@ export class CharacterFactory extends AbstractStandardFactory<Character> {
       x: startPosition.x,
       y: startPosition.y,
       maxJumps: maxJumps,
-      failY: GAME_DIMENSIONS.height + characterSize.h * 2,
+      failY: GAME_DIMENSIONS.height + GAME_DIMENSIONS.height / 2,
       playerConfig: {
         y: 10,
         animations: [

@@ -14,7 +14,7 @@ import Stats from "stats.js";
     backgroundAlpha: 1,
   });
 
-  await app.init({ background: "#283029" });
+  await app.init({ background: "#110D12" });
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 

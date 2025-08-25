@@ -55,11 +55,11 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
 
         const sizeFurniture = [];
         for (const config of currentPlatformFurnitures) {
-          const furniture = new Furniture(config);
-          furniture.build();
-          parent.addChild(furniture);
-
-          sizeFurniture.push(furniture);
+          const frn = new Furniture(config);
+          frn.build();
+          parent.addChild(frn);
+          frn.visible = false;
+          sizeFurniture.push(frn);
         }
 
         furniture.set(pltSet.size, sizeFurniture);
@@ -81,11 +81,12 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
       sizePlatformTile,
       size: BigPlatformSizes.WIN,
     };
-    const frt = new Furniture(furnitureConf);
-    frt.build();
-    parent.addChild(frt);
+    const frn = new Furniture(furnitureConf);
+    frn.visible = false;
+    frn.build();
+    parent.addChild(frn);
 
-    furniture.set(BigPlatformSizes.WIN, [frt]);
+    furniture.set(BigPlatformSizes.WIN, [frn]);
 
     return furniture;
   }
@@ -98,7 +99,6 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
 
     while (width < maxWidth) {
       const randomIndex = Math.floor(Math.random() * ALL_TEXTURES.length);
-      console.warn("Name- ", ALL_TEXTURES[randomIndex]);
       const nextTexture = assetsLoader.getTexture(ALL_TEXTURES[randomIndex]);
       width += nextTexture.width + sizePlatformTile / 2;
 

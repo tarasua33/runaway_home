@@ -32,6 +32,7 @@ export class Character extends StandardContainer<CharacterConfig> {
   private _fixedX = characterFixedX;
   private _jumps = 0;
   private _firstCollide = true;
+  private _isFinish = false;
 
   public build(): void {
     super.build();
@@ -78,6 +79,8 @@ export class Character extends StandardContainer<CharacterConfig> {
     if (this._firstCollide) {
       this._firstCollide = false;
       this.animationComplete.dispatch();
+    } else if (this._isFinish) {
+      this._player.playAnimation("idle", true);
     } else {
       this._player.playAnimation("run", true);
     }
@@ -123,11 +126,13 @@ export class Character extends StandardContainer<CharacterConfig> {
   public reset(): void {
     this._player.playAnimation("idle", true);
     this._jumps = 0;
+    this._isFinish = false;
     this._firstCollide = true;
     this._body.isStatic = true;
   }
 
   public celebration(): void {
+    this._isFinish = true;
     this._player.playAnimation("idle", true);
   }
 }
