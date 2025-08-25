@@ -11,6 +11,7 @@ import { BigPlatformSizes, PlatformTypes } from "../../models/PlatformsModel";
 import { PhysicEngine } from "../../libs/physic/PhysicEngine";
 import { IPhysicBody } from "../../libs/physic/IPhysicBody";
 import { ITicker } from "../../libs/utils/ITicker";
+import { Furniture } from "./Furniture";
 // import { Body } from "matter-js";
 
 export interface PlatformConfig extends StandardContainerConfig {
@@ -30,6 +31,7 @@ export class Platform extends StandardContainer<PlatformConfig> {
   private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
   private _isWinPlatform = false;
+  private _fr: Furniture | undefined;
 
   public build(): void {
     const { tileConfig, typeCnf, sizeCnf, physicEngine, platformID } =
@@ -69,6 +71,24 @@ export class Platform extends StandardContainer<PlatformConfig> {
     // const height = body.bounds.max.y - body.bounds.min.y;
   }
 
+  public setFurniture(fr: Furniture): void {
+    this._fr = fr;
+    fr.visible = true;
+    // fr.position = this.position;
+  }
+
+  public getFurniture(): Furniture | undefined {
+    const fr = this._fr;
+
+    if (fr) {
+      fr.visible = false;
+      fr.position = { x: 0, y: 0 };
+    }
+    this._fr = undefined;
+
+    return fr;
+  }
+
   public setPosition(x: number, y: number): void {
     const body = this._body;
 
@@ -99,5 +119,10 @@ export class Platform extends StandardContainer<PlatformConfig> {
 
     this.x = this._body.position.x;
     this.y = this._body.position.y;
+
+    if (this._fr) {
+      this._fr.x = this.x;
+      this._fr.y = this.y;
+    }
   }
 }

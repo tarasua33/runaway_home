@@ -3,7 +3,7 @@ import { Controller, IControllerParams } from "../libs/controllers/Controller";
 import { Sequence } from "../libs/controllers/Sequence";
 import { AwaitTimeStep } from "../libs/controllers/steps/AwaitTimeStep";
 import { IFadeIn } from "../libs/utils/GameHelper";
-import { ResetGameStep } from "./steps/ResetGameStep";
+import { ResetGameStep, ResetGameStepParams } from "./steps/ResetGameStep";
 import { ScreenFadeInStep } from "./steps/ScreenFadeInStep";
 
 interface IControllerBaseParams extends IControllerParams {
@@ -36,7 +36,8 @@ export class TransitionController extends Controller<IControllerBaseParams> {
       platforms: this._models.platformsModel.getPlatforms(),
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
-    });
+      furniture: gameView.furniture,
+    } as ResetGameStepParams);
     // 3
     baseSequence.addStepByStep(new AwaitTimeStep(), {
       delay: 2.0,

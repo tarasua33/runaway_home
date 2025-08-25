@@ -1,7 +1,9 @@
+import { IFurniture } from "../../factories/FurnitureFactory";
 import {
   BaseStep,
   BaseStepParams,
 } from "../../libs/controllers/steps/BaseStep";
+import { removeFurniture } from "../../libs/utils/GameHelper";
 import { BigPlatformSizes, IPlatforms } from "../../models/PlatformsModel";
 import { Character } from "../../view/character/Character";
 import { Platform } from "../../view/platforms/Platform";
@@ -11,6 +13,7 @@ export interface ResetGameStepParams extends BaseStepParams {
   platforms: IPlatforms;
   platformMoveContainer: PlatformMoveContainer;
   character: Character;
+  furniture: IFurniture;
 }
 
 export class ResetGameStep<
@@ -32,14 +35,15 @@ export class ResetGameStep<
   }
 
   private _onPlatformRemoved(plt: Platform): void {
+    const { platforms, furniture } = this._params;
+
+    removeFurniture(plt, furniture);
+
     plt.setPosition(-2000, 0);
     if (plt.isWinPlatform) {
-      this._params.platforms
-        .get(plt.typePlt)!
-        .get(BigPlatformSizes.WIN)!
-        .push(plt);
+      platforms.get(plt.typePlt)!.get(BigPlatformSizes.WIN)!.push(plt);
     } else {
-      this._params.platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
+      platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
     }
   }
 

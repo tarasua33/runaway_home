@@ -14,7 +14,10 @@ import {
   SetStartPositionsPlatformsStepParams,
 } from "./steps/StartPositionsPlatformsStep";
 import { StopGameStep } from "./steps/StopGameStep";
-import { UpdatePlatformsStep } from "./steps/UpdatePlatformsStep";
+import {
+  UpdatePlatformsStep,
+  UpdatePlatformsStepParams,
+} from "./steps/UpdatePlatformsStep";
 import { ScreenFadeInStep } from "./steps/ScreenFadeInStep";
 import { IFadeIn, IFadeOut } from "../libs/utils/GameHelper";
 import {
@@ -89,6 +92,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     const startStepParams: SetStartPositionsPlatformsStepParams = {
       platforms: lvlPlatforms,
       platformContainer: gameView.platformMoveContainer,
+      furniture: gameView.furniture,
     };
     startSequence.addStepByStep(SetStartPositionsStep, startStepParams);
     // 4
@@ -118,8 +122,8 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     playSequence.addPermanent(updatePlatformsStep, {
       platforms: lvlPlatforms,
       platformContainer: gameView.platformMoveContainer,
-      // character: gameView.character,
-    });
+      furniture: gameView.furniture,
+    } as UpdatePlatformsStepParams);
     // 2
     playSequence.addPermanent(this._playerActionListeningStep, {
       userInteractionDispatcher,

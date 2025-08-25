@@ -8,6 +8,8 @@ import { PlatformMoveContainer } from "../view/platforms/PlatformMoveContainer";
 import { TransitionsScreen } from "../view/TransitionsScreen";
 import { CharacterContainerFactory } from "./CharacterContainerFactory";
 import { CharacterFactory } from "./CharacterFactory";
+import { FurnitureContainerFactory } from "./FurnitureContainerFactory";
+import { FurnitureFactory, IFurniture } from "./FurnitureFactory";
 import { PlatformMoveContainerFactory } from "./PlatformMoveContainerFactory";
 import { PlatformsFactory } from "./PlatformsFactory";
 import { TransitionsScreenFactory } from "./TransitionsScreenFactory";
@@ -21,8 +23,10 @@ export interface IGameView {
   platforms: IPlatforms;
   platformMoveContainer: PlatformMoveContainer;
   characterContainer: StandardContainer;
+  furnitureContainer: StandardContainer;
   character: Character;
   transitionsScreen: TransitionsScreen;
+  furniture: IFurniture;
 }
 
 export class GameViewFactory extends AbstractBaseFactory {
@@ -34,7 +38,12 @@ export class GameViewFactory extends AbstractBaseFactory {
     const characterContainerFactory = new CharacterContainerFactory();
     const characterFactory = new CharacterFactory();
     const transitionsScreenFactory = new TransitionsScreenFactory();
+    const furnitureContainerFactory = new FurnitureContainerFactory();
+    const furnitureFactory = new FurnitureFactory();
 
+    const furnitureContainer = furnitureContainerFactory.buildUi({
+      parent: mainScene,
+    });
     const platformMoveContainer = platformMoveContainerFactory.buildUi({
       parent: mainScene,
     });
@@ -44,6 +53,8 @@ export class GameViewFactory extends AbstractBaseFactory {
 
     const view: IGameView = {
       platforms: platformFactory.buildUi({ physicEngine }),
+      furnitureContainer: furnitureContainer,
+      furniture: furnitureFactory.buildUi({ parent: furnitureContainer }),
       platformMoveContainer: platformMoveContainer,
       characterContainer,
       character: characterFactory.buildUi({

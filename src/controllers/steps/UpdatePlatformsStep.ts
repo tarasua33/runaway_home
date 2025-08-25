@@ -1,8 +1,14 @@
+import { IFurniture } from "../../factories/FurnitureFactory";
 import {
   BaseStep,
   BaseStepParams,
 } from "../../libs/controllers/steps/BaseStep";
-import { getPlatformData, IPlatformData } from "../../libs/utils/GameHelper";
+import {
+  addFurniture,
+  getPlatformData,
+  IPlatformData,
+  removeFurniture,
+} from "../../libs/utils/GameHelper";
 import { Signal } from "../../libs/utils/Signal";
 import {
   BigPlatformSizes,
@@ -15,6 +21,7 @@ import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContaine
 export interface UpdatePlatformsStepParams extends BaseStepParams {
   platforms: IPlatforms;
   platformContainer: PlatformMoveContainer;
+  furniture: IFurniture;
 }
 
 export class UpdatePlatformsStep<
@@ -46,19 +53,19 @@ export class UpdatePlatformsStep<
   }
 
   private _onPlatformRemoved(plt: Platform): void {
+    const { platforms, furniture } = this._params;
+
+    removeFurniture(plt, furniture);
     plt.setPosition(-2000, 0);
     if (plt.isWinPlatform) {
-      this._params.platforms
-        .get(plt.typePlt)!
-        .get(BigPlatformSizes.WIN)!
-        .push(plt);
+      platforms.get(plt.typePlt)!.get(BigPlatformSizes.WIN)!.push(plt);
     } else {
-      this._params.platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
+      platforms.get(plt.typePlt)!.get(plt.sizePlt)!.push(plt);
     }
   }
 
   private _getNewPlatform(): void {
-    const { platformContainer, platforms } = this._params;
+    const { platformContainer, platforms, furniture } = this._params;
     let newPlt;
     if (this._nextAddWinPlatform) {
       const arr = platforms.get(PlatformTypes.big)!.get(BigPlatformSizes.WIN)!;
@@ -79,6 +86,7 @@ export class UpdatePlatformsStep<
       newPlt = arr.pop()!;
     }
 
+    addFurniture([newPlt], furniture);
     platformContainer.addPlatform(
       newPlt,
       this._models.platformsModel.sizePlatformTile,

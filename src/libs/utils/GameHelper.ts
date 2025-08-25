@@ -1,9 +1,11 @@
+import { IFurniture } from "../../factories/FurnitureFactory";
 import { GAME_DIMENSIONS } from "../../Game";
 import {
   BigPlatformSizes,
   IPlatforms,
   PlatformTypes,
 } from "../../models/PlatformsModel";
+import { Platform } from "../../view/platforms/Platform";
 import { Signal } from "./Signal";
 
 export interface IFadeIn {
@@ -64,4 +66,30 @@ export function getPlatformData(
   }
 
   return data;
+}
+
+export function addFurniture(
+  platforms: Platform[],
+  furniture: IFurniture,
+): void {
+  for (const plt of platforms) {
+    const size = plt.sizePlt;
+
+    if (size !== BigPlatformSizes.ONE && size !== BigPlatformSizes.WIN) {
+      const arr = furniture.get(size)!;
+      const randFurn = arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
+      plt.setFurniture(randFurn);
+    }
+  }
+}
+
+export function removeFurniture(
+  platform: Platform,
+  furniture: IFurniture,
+): void {
+  const furn = platform.getFurniture();
+
+  if (furn) {
+    furniture.get(furn.size)!.push(furn);
+  }
 }
