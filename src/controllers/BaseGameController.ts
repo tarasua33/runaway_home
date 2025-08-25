@@ -158,24 +158,25 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     super._onComplete();
   }
 
-  private _onStopGame(): void {
+  private _onStopGame(isFail: boolean): void {
     const gameView = this._gameView;
     this._mng.addDynamicStep(this._stopGameStep, {
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
+      isFail,
     });
 
     this.forceComplete();
   }
 
   private _onGameFail(): void {
-    this._onStopGame();
+    this._onStopGame(true);
 
     this.completeStepSignal.dispatch(false);
   }
 
   private _onGameWin(): void {
-    this._onStopGame();
+    this._onStopGame(false);
 
     this.completeStepSignal.dispatch(true);
   }

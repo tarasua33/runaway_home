@@ -8,14 +8,18 @@ import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContaine
 export interface StopGameStepParams extends BaseStepParams {
   platformMoveContainer: PlatformMoveContainer;
   character: Character;
+  isFail: boolean;
 }
 
 export class StopGameStep<
   T extends StopGameStepParams = StopGameStepParams,
 > extends BaseStep<StopGameStepParams> {
-  public start({ platformMoveContainer, character }: T): void {
+  public start({ platformMoveContainer, character, isFail }: T): void {
     platformMoveContainer.stop();
-    character.switchStaticBody(true);
+
+    if (isFail) {
+      character.switchStaticBody(true);
+    }
 
     this._onComplete();
   }

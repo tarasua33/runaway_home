@@ -20,6 +20,9 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
       this._models.platformsModel;
 
     const furniture: IFurniture = new Map();
+    const wrapperY = -sizePlatformTile / 2;
+    const spriteAnchor = { x: 0.5, y: 1 };
+    const spriteScale = { x: 1.2, y: 1.2 };
 
     for (const pltSet of platformSettings) {
       if (
@@ -27,7 +30,6 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
         pltSet.size !== BigPlatformSizes.WIN
       ) {
         const maxWidth = sizePlatformTile * pltSet.size;
-
         const currentPlatformFurnitures: FurnitureConfig[] = [];
 
         for (let index = 0; index < pltSet.number + EXTRA_FURNITURE; index++) {
@@ -36,13 +38,14 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
           for (const texture of textures) {
             spriteConfigs.push({
               texture,
-              anchor: { x: 0.5, y: 1 },
+              anchor: spriteAnchor,
+              scale: spriteScale,
             });
           }
 
           currentPlatformFurnitures.push({
             wrapperConf: {
-              y: -sizePlatformTile / 2,
+              y: wrapperY,
             },
             sprites: spriteConfigs,
             sizePlatformTile,
@@ -62,6 +65,27 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
         furniture.set(pltSet.size, sizeFurniture);
       }
     }
+
+    // WIN FRN
+    const spriteConfigs: StandardSpriteConfig[] = [];
+    spriteConfigs.push({
+      texture: this._assetsLoader.getTexture("finish"),
+      anchor: spriteAnchor,
+      scale: spriteScale,
+    });
+    const furnitureConf = {
+      wrapperConf: {
+        y: wrapperY,
+      },
+      sprites: spriteConfigs,
+      sizePlatformTile,
+      size: BigPlatformSizes.WIN,
+    };
+    const frt = new Furniture(furnitureConf);
+    frt.build();
+    parent.addChild(frt);
+
+    furniture.set(BigPlatformSizes.WIN, [frt]);
 
     return furniture;
   }

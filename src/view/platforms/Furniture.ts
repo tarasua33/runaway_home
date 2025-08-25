@@ -34,13 +34,13 @@ export class Furniture extends StandardContainer<FurnitureConfig> {
         sprite.x = sizePlatformTile / 2;
       } else {
         const offset =
-          Math.round((sizePlatformTile / 4) * Math.random()) +
-          sizePlatformTile / 4;
+          Math.round(sizePlatformTile * 0.3 * Math.random()) +
+          sizePlatformTile * 0.1;
         sprite.x = prevWidth + offset + sprite.width / 2;
       }
 
       prevWidth = sprite.x + sprite.width / 2;
-
+      sprite.scale.x = sprite.scale.x * Math.random() > 0.5 ? -1 : 1;
       wrapper.addChild(sprite);
     }
 

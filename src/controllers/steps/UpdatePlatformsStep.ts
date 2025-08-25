@@ -73,6 +73,7 @@ export class UpdatePlatformsStep<
       newPlt.isWinPlatform = true;
 
       this._nextAddWinPlatform = false;
+      addFurniture([newPlt], furniture, true);
     } else {
       const platformBigData: IPlatformData[] = getPlatformData(
         platforms,
@@ -84,9 +85,9 @@ export class UpdatePlatformsStep<
 
       const arr = platforms.get(PlatformTypes.big)!.get(data.size)!;
       newPlt = arr.pop()!;
+      addFurniture([newPlt], furniture);
     }
 
-    addFurniture([newPlt], furniture);
     platformContainer.addPlatform(
       newPlt,
       this._models.platformsModel.sizePlatformTile,

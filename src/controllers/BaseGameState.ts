@@ -65,6 +65,7 @@ export class BaseGameState extends BaseState {
 
     const pltModel = this._models.platformsModel;
     transitionController.start({
+      success,
       gameView: this._gameView,
       title: this._success
         ? PHRASES.NEXT_LVL + ` ${pltModel.lvl + 1}`

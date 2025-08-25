@@ -71,11 +71,15 @@ export function getPlatformData(
 export function addFurniture(
   platforms: Platform[],
   furniture: IFurniture,
+  winPlatform?: boolean,
 ): void {
   for (const plt of platforms) {
     const size = plt.sizePlt;
 
-    if (size !== BigPlatformSizes.ONE && size !== BigPlatformSizes.WIN) {
+    if (winPlatform) {
+      const arr = furniture.get(BigPlatformSizes.WIN)!;
+      plt.setFurniture(arr[0]!);
+    } else if (size !== BigPlatformSizes.ONE) {
       const arr = furniture.get(size)!;
       const randFurn = arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
       plt.setFurniture(randFurn);

@@ -44,12 +44,13 @@ export class CharacterFactory extends AbstractStandardFactory<Character> {
       maxJumps: maxJumps,
       failY: GAME_DIMENSIONS.height + characterSize.h * 2,
       playerConfig: {
+        y: 10,
         animations: [
           {
             name: "run",
             animation: {
               textures: runTextures,
-              anchor: { x: 0.5, y: 0.45 },
+              anchor: { x: 0.5, y: 0.5 },
               scale: { x: -1, y: 1 },
               autoPlay: false,
               animationSpeed: 0.22,
@@ -59,7 +60,7 @@ export class CharacterFactory extends AbstractStandardFactory<Character> {
             name: "idle",
             animation: {
               textures: idleTextures,
-              anchor: { x: 0.5, y: 0.45 },
+              anchor: { x: 0.5, y: 0.5 },
               scale: { x: -1, y: 1 },
               autoPlay: false,
               animationSpeed: 0.2,
@@ -69,7 +70,7 @@ export class CharacterFactory extends AbstractStandardFactory<Character> {
             name: "jump",
             animation: {
               textures: jumpTextures,
-              anchor: { x: 0.5, y: 0.45 },
+              anchor: { x: 0.5, y: 0.5 },
               scale: { x: -1, y: 1 },
               autoPlay: false,
               animationSpeed: 0.15,

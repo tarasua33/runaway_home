@@ -124,5 +124,10 @@ export class Character extends StandardContainer<CharacterConfig> {
     this._player.playAnimation("idle", true);
     this._jumps = 0;
     this._firstCollide = true;
+    this._body.isStatic = true;
+  }
+
+  public celebration(): void {
+    this._player.playAnimation("idle", true);
   }
 }
