@@ -16,6 +16,7 @@ import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContaine
 
 export interface SetStartPositionsPlatformsStepParams extends BaseStepParams {
   furniture: IFurniture;
+  furnitureFront: IFurniture;
   platforms: IPlatforms;
   platformContainer: PlatformMoveContainer;
 }
@@ -26,7 +27,12 @@ export class SetStartPositionsPlatformsStep<
   // eslint-disable-next-line prettier/prettier
   T extends SetStartPositionsPlatformsStepParams = SetStartPositionsPlatformsStepParams,
 > extends BaseStep<SetStartPositionsPlatformsStepParams> {
-  public start({ platforms, platformContainer, furniture }: T): void {
+  public start({
+    platforms,
+    platformContainer,
+    furniture,
+    furnitureFront,
+  }: T): void {
     const { sizePlatformTile, platformStartX, platformStartY } =
       this._models.platformsModel;
     const platformsToAdd: Platform[] = [];
@@ -66,7 +72,8 @@ export class SetStartPositionsPlatformsStep<
       sizePlatformTile,
     );
 
-    addFurniture(platformsToAdd, furniture);
+    addFurniture(platformsToAdd, furniture, false);
+    addFurniture(platformsToAdd, furnitureFront, true);
     platformContainer.setPlatforms(platformsToAdd);
 
     this._onComplete();

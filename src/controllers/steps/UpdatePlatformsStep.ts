@@ -22,6 +22,7 @@ export interface UpdatePlatformsStepParams extends BaseStepParams {
   platforms: IPlatforms;
   platformContainer: PlatformMoveContainer;
   furniture: IFurniture;
+  furnitureFront: IFurniture;
 }
 
 export class UpdatePlatformsStep<
@@ -53,9 +54,9 @@ export class UpdatePlatformsStep<
   }
 
   private _onPlatformRemoved(plt: Platform): void {
-    const { platforms, furniture } = this._params;
-
-    removeFurniture(plt, furniture);
+    const { platforms, furniture, furnitureFront } = this._params;
+    removeFurniture(plt, furniture, false);
+    removeFurniture(plt, furnitureFront, true);
     plt.setPosition(-2000, 0);
     if (plt.isWinPlatform) {
       platforms.get(plt.typePlt)!.get(BigPlatformSizes.WIN)!.push(plt);
@@ -65,7 +66,8 @@ export class UpdatePlatformsStep<
   }
 
   private _getNewPlatform(): void {
-    const { platformContainer, platforms, furniture } = this._params;
+    const { platformContainer, platforms, furniture, furnitureFront } =
+      this._params;
     let newPlt;
     if (this._nextAddWinPlatform) {
       const arr = platforms.get(PlatformTypes.big)!.get(BigPlatformSizes.WIN)!;
@@ -73,7 +75,9 @@ export class UpdatePlatformsStep<
       newPlt.isWinPlatform = true;
 
       this._nextAddWinPlatform = false;
-      addFurniture([newPlt], furniture, true);
+
+      addFurniture([newPlt], furnitureFront, true, true);
+      addFurniture([newPlt], furniture, false, true);
     } else {
       const platformBigData: IPlatformData[] = getPlatformData(
         platforms,
@@ -85,7 +89,8 @@ export class UpdatePlatformsStep<
 
       const arr = platforms.get(PlatformTypes.big)!.get(data.size)!;
       newPlt = arr.pop()!;
-      addFurniture([newPlt], furniture);
+      addFurniture([newPlt], furniture, false);
+      addFurniture([newPlt], furnitureFront, true);
     }
 
     platformContainer.addPlatform(

@@ -1,4 +1,4 @@
-export const ALL_TEXTURES = [
+export const BACK_ELEMENTS = [
   "bench_1",
   "box_2",
   "chest_2",
@@ -32,4 +32,12 @@ export const ALL_TEXTURES = [
   "scarecrow_2",
   "tree_bid",
   "weapon_3",
+];
+
+export const FRONT_ELEMENTS = [
+  "bush_1",
+  "bush_2",
+  "bush_3",
+  "stouns",
+  "sunflowers",
 ];

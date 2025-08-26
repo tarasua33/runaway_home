@@ -14,6 +14,7 @@ export interface ResetGameStepParams extends BaseStepParams {
   platformMoveContainer: PlatformMoveContainer;
   character: Character;
   furniture: IFurniture;
+  furnitureFront: IFurniture;
 }
 
 export class ResetGameStep<
@@ -35,9 +36,10 @@ export class ResetGameStep<
   }
 
   private _onPlatformRemoved(plt: Platform): void {
-    const { platforms, furniture } = this._params;
+    const { platforms, furniture, furnitureFront } = this._params;
 
-    removeFurniture(plt, furniture);
+    removeFurniture(plt, furniture, false);
+    removeFurniture(plt, furnitureFront, true);
 
     plt.setPosition(-2000, 0);
     if (plt.isWinPlatform) {

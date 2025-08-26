@@ -31,7 +31,8 @@ export class Platform extends StandardContainer<PlatformConfig> {
   private _body!: IPhysicBody;
   private _physicEngine!: PhysicEngine;
   private _isWinPlatform = false;
-  private _fr: Furniture | undefined;
+  private _furniture: Furniture | undefined;
+  private _frontFr: Furniture | undefined;
 
   public build(): void {
     const { tileConfig, typeCnf, sizeCnf, physicEngine, platformID } =
@@ -71,22 +72,41 @@ export class Platform extends StandardContainer<PlatformConfig> {
     // const height = body.bounds.max.y - body.bounds.min.y;
   }
 
-  public setFurniture(fr: Furniture): void {
-    this._fr = fr;
+  public setFrontFurniture(fr: Furniture): void {
+    this._frontFr = fr;
     fr.alpha = 1;
     fr.visible = true;
-    // fr.position = this.position;
   }
 
-  public getFurniture(): Furniture | undefined {
-    const fr = this._fr;
+  public getFrontFurniture(): Furniture | undefined {
+    const fr = this._frontFr;
 
     if (fr) {
       fr.alpha = 0;
       fr.visible = false;
       fr.position = { x: -1000, y: 0 };
     }
-    this._fr = undefined;
+    this._frontFr = undefined;
+
+    return fr;
+  }
+
+  public setFurniture(fr: Furniture): void {
+    this._furniture = fr;
+    fr.alpha = 1;
+    fr.visible = true;
+    // fr.position = this.position;
+  }
+
+  public getFurniture(): Furniture | undefined {
+    const fr = this._furniture;
+
+    if (fr) {
+      fr.alpha = 0;
+      fr.visible = false;
+      fr.position = { x: -1000, y: 0 };
+    }
+    this._furniture = undefined;
 
     return fr;
   }
@@ -122,9 +142,14 @@ export class Platform extends StandardContainer<PlatformConfig> {
     this.x = this._body.position.x;
     this.y = this._body.position.y;
 
-    if (this._fr) {
-      this._fr.x = this.x;
-      this._fr.y = this.y;
+    if (this._furniture) {
+      this._furniture.x = this.x;
+      this._furniture.y = this.y;
+    }
+
+    if (this._frontFr) {
+      this._frontFr.x = this.x;
+      this._frontFr.y = this.y;
     }
   }
 }

@@ -10,6 +10,7 @@ import { BigPlatformSizes } from "../../models/PlatformsModel";
 
 export interface FurnitureConfig extends StandardContainerConfig {
   sizePlatformTile: number;
+  offsetX: number;
   size: BigPlatformSizes;
   sprites: StandardSpriteConfig[];
   wrapperConf: StandardContainerConfig;
@@ -18,7 +19,8 @@ export interface FurnitureConfig extends StandardContainerConfig {
 export class Furniture extends StandardContainer<FurnitureConfig> {
   public size!: BigPlatformSizes;
   public build(): void {
-    const { sizePlatformTile, size, sprites, wrapperConf } = this._config;
+    const { sizePlatformTile, size, sprites, wrapperConf, offsetX } =
+      this._config;
 
     const wrapper = new StandardContainer(wrapperConf);
     wrapper.build();
@@ -34,8 +36,7 @@ export class Furniture extends StandardContainer<FurnitureConfig> {
         sprite.x = sizePlatformTile / 2;
       } else {
         const offset =
-          Math.round(sizePlatformTile * 0.3 * Math.random()) +
-          sizePlatformTile * 0.1;
+          Math.round(offsetX * 0.8 * Math.random()) + offsetX * 0.2;
         sprite.x = prevWidth + offset + sprite.width / 2;
       }
 

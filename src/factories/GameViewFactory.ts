@@ -15,6 +15,7 @@ import { CharacterFactory } from "./CharacterFactory";
 import { CloudsFactory } from "./CloudsFactory";
 import { FurnitureContainerFactory } from "./FurnitureContainerFactory";
 import { FurnitureFactory, IFurniture } from "./FurnitureFactory";
+import { FurnitureFrontFactory } from "./FurnitureFrontFactory";
 import { MountainsFactory } from "./MountainsFactory";
 import { PlatformMoveContainerFactory } from "./PlatformMoveContainerFactory";
 import { PlatformsFactory } from "./PlatformsFactory";
@@ -31,9 +32,11 @@ export interface IGameView {
   platformMoveContainer: PlatformMoveContainer;
   characterContainer: StandardContainer;
   furnitureContainer: StandardContainer;
+  furnitureFrontContainer: StandardContainer;
   character: Character;
   transitionsScreen: TransitionsScreen;
   furniture: IFurniture;
+  furnitureFront: IFurniture;
   // bgSky: StandardTilingSprite;
   bgSky: StandardSprite;
   clouds: CloudsContainer;
@@ -56,6 +59,9 @@ export class GameViewFactory extends AbstractBaseFactory {
     const cloudsFactory = new CloudsFactory();
     const mountainsFactory = new MountainsFactory();
     const shadowsFactory = new ShadowFactory();
+    const furnitureFrontContainerFactory = new FurnitureContainerFactory();
+    const furnitureFrontFactory = new FurnitureFrontFactory();
+    // FurnitureFrontFactory
 
     const bgSky = bgSkyFactory.buildUi({
       parent: mainScene,
@@ -68,7 +74,6 @@ export class GameViewFactory extends AbstractBaseFactory {
     const shadows = shadowsFactory.buildUi({
       parent: mainScene,
     });
-
     const furnitureContainer = furnitureContainerFactory.buildUi({
       parent: mainScene,
     });
@@ -76,6 +81,9 @@ export class GameViewFactory extends AbstractBaseFactory {
       parent: mainScene,
     });
     const characterContainer = characterContainerFactory.buildUi({
+      parent: mainScene,
+    });
+    const furnitureFrontContainer = furnitureFrontContainerFactory.buildUi({
       parent: mainScene,
     });
 
@@ -91,6 +99,10 @@ export class GameViewFactory extends AbstractBaseFactory {
       character: characterFactory.buildUi({
         parent: characterContainer,
         physicEngine,
+      }),
+      furnitureFrontContainer,
+      furnitureFront: furnitureFrontFactory.buildUi({
+        parent: furnitureFrontContainer,
       }),
       clouds: cloudsFactory.buildUi({
         parent: mainScene,

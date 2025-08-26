@@ -71,6 +71,7 @@ export function getPlatformData(
 export function addFurniture(
   platforms: Platform[],
   furniture: IFurniture,
+  isFront: boolean,
   winPlatform?: boolean,
 ): void {
   for (const plt of platforms) {
@@ -78,11 +79,19 @@ export function addFurniture(
 
     if (winPlatform) {
       const arr = furniture.get(BigPlatformSizes.WIN)!;
-      plt.setFurniture(arr[0]!);
+      if (isFront) {
+        plt.setFrontFurniture(arr[0]!);
+      } else {
+        plt.setFurniture(arr[0]!);
+      }
     } else if (size !== BigPlatformSizes.ONE) {
       const arr = furniture.get(size)!;
       const randFurn = arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
-      plt.setFurniture(randFurn);
+      if (isFront) {
+        plt.setFrontFurniture(randFurn);
+      } else {
+        plt.setFurniture(randFurn);
+      }
     }
   }
 }
@@ -90,8 +99,14 @@ export function addFurniture(
 export function removeFurniture(
   platform: Platform,
   furniture: IFurniture,
+  isFront: boolean,
 ): void {
-  const furn = platform.getFurniture();
+  let furn;
+  if (isFront) {
+    furn = platform.getFrontFurniture();
+  } else {
+    furn = platform.getFurniture();
+  }
 
   if (furn) {
     furniture.get(furn.size)!.push(furn);

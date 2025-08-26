@@ -51,6 +51,7 @@ export class TransitionController extends Controller<IControllerBaseParams> {
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
       furniture: gameView.furniture,
+      furnitureFront: gameView.furnitureFront,
     } as ResetGameStepParams);
     // 4
     baseSequence.addStepByStep(new AwaitTimeStep(), {

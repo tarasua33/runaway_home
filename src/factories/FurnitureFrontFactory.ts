@@ -2,7 +2,7 @@ import { Texture } from "pixi.js";
 import { AbstractStandardFactory } from "../libs/factories/AbstractStandardFactory";
 import { StandardContainer } from "../libs/gameObjects/StandardContainer";
 import { Furniture, FurnitureConfig } from "../view/platforms/Furniture";
-import { BACK_ELEMENTS } from "./FurnitureData";
+import { FRONT_ELEMENTS } from "./FurnitureData";
 import { BigPlatformSizes } from "../models/PlatformsModel";
 import { StandardSpriteConfig } from "../libs/gameObjects/StandardSprite";
 
@@ -14,16 +14,15 @@ const EXTRA_FURNITURE = 2;
 
 export type IFurniture = Map<BigPlatformSizes, Furniture[]>;
 
-export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
+export class FurnitureFrontFactory extends AbstractStandardFactory<IFurniture> {
   public buildUi({ parent }: IBuildConfig): IFurniture {
     const { platformStartSettings: platformSettings, sizePlatformTile } =
       this._models.platformsModel;
 
     const furniture: IFurniture = new Map();
-    const wrapperY = -sizePlatformTile / 2 + 3;
+    const wrapperY = -sizePlatformTile / 2 + 2;
     const spriteAnchor = { x: 0.5, y: 1 };
-    const spriteScale = { x: 1.3, y: 1.3 };
-    const xOffset = sizePlatformTile / 2;
+    const spriteScale = { x: 0.5, y: 0.5 };
 
     for (const pltSet of platformSettings) {
       if (
@@ -34,7 +33,7 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
         const currentPlatformFurnitures: FurnitureConfig[] = [];
 
         for (let index = 0; index < pltSet.number + EXTRA_FURNITURE; index++) {
-          const textures = this._getTextures(maxWidth, xOffset);
+          const textures = this._getTextures(maxWidth, sizePlatformTile);
           const spriteConfigs: StandardSpriteConfig[] = [];
           for (const texture of textures) {
             spriteConfigs.push({
@@ -52,7 +51,7 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
             sizePlatformTile,
             size: pltSet.size,
             x: -1000,
-            offsetX: xOffset,
+            offsetX: sizePlatformTile,
           });
         }
 
@@ -72,8 +71,8 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
     // WIN FRN
     const spriteConfigs: StandardSpriteConfig[] = [];
     spriteConfigs.push({
-      texture: this._assetsLoader.getTexture("finish"),
-      anchor: spriteAnchor,
+      texture: this._assetsLoader.getTexture("sunflowers"),
+      anchor: { x: 1, y: 1 },
       scale: spriteScale,
     });
     const furnitureConf = {
@@ -82,7 +81,7 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
       },
       sprites: spriteConfigs,
       sizePlatformTile,
-      offsetX: xOffset,
+      offsetX: sizePlatformTile,
       size: BigPlatformSizes.WIN,
       x: -1000,
     };
@@ -103,8 +102,8 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
     let width = offset;
 
     while (width < maxWidth) {
-      const randomIndex = Math.floor(Math.random() * BACK_ELEMENTS.length);
-      const nextTexture = assetsLoader.getTexture(BACK_ELEMENTS[randomIndex]);
+      const randomIndex = Math.floor(Math.random() * FRONT_ELEMENTS.length);
+      const nextTexture = assetsLoader.getTexture(FRONT_ELEMENTS[randomIndex]);
       width += nextTexture.width + offset;
 
       textures.push(nextTexture);

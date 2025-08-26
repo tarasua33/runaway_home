@@ -93,6 +93,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       platforms: lvlPlatforms,
       platformContainer: gameView.platformMoveContainer,
       furniture: gameView.furniture,
+      furnitureFront: gameView.furnitureFront,
     };
     startSequence.addStepByStep(SetStartPositionsStep, startStepParams);
     // 4
@@ -125,6 +126,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       platforms: lvlPlatforms,
       platformContainer: gameView.platformMoveContainer,
       furniture: gameView.furniture,
+      furnitureFront: gameView.furnitureFront,
     } as UpdatePlatformsStepParams);
     // 2
     playSequence.addPermanent(this._playerActionListeningStep, {
