@@ -11,6 +11,7 @@ export interface StopGameStepParams extends BaseStepParams {
   character: Character;
   isFail: boolean;
   mountains: EnvMoveContainer;
+  shadows: EnvMoveContainer;
 }
 
 export class StopGameStep<
@@ -21,10 +22,11 @@ export class StopGameStep<
     character,
     isFail,
     mountains,
+    shadows,
   }: T): void {
     platformMoveContainer.stop();
     mountains.stop();
-
+    shadows.stop();
     if (isFail) {
       character.switchStaticBody(true);
     }

@@ -31,7 +31,7 @@ export class MountainsFactory extends AbstractStandardFactory<EnvMoveContainer> 
       ],
       xOffset: -20,
       randomizeOffset: false,
-      speed: 0.3,
+      speed: 0.35,
       y: GAME_DIMENSIONS.height + GAME_DIMENSIONS.height / 2,
     };
 

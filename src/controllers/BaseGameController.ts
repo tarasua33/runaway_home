@@ -113,6 +113,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
       mountains: gameView.mountains,
+      shadows: gameView.shadows,
     });
 
     const playSequence = new Sequence();
@@ -165,6 +166,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
       mountains: gameView.mountains,
+      shadows: gameView.shadows,
       isFail,
     });
 

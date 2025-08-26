@@ -34,12 +34,14 @@ export class EnvMoveContainer extends StandardContainer<EnvMoveContainerConfig> 
       const part = new StandardSprite(conf);
       part.x = currentX;
       const offset = randomizeOffset
-        ? (xOffset / 2) * Math.random() + xOffset / 2
+        ? xOffset * 0.25 * Math.random() + xOffset * 0.75
         : xOffset;
       currentX = currentX + part.width + offset;
       part.build();
       this.addChild(part);
     }
+
+    console.warn(currentX);
   }
 
   public play(): void {
