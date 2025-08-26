@@ -6,7 +6,7 @@ import { PhysicEngine } from "../libs/physic/PhysicEngine";
 import { IPlatforms } from "../models/PlatformsModel";
 import { Character } from "../view/character/Character";
 import { CloudsContainer } from "../view/env/Clouds";
-import { Mountains } from "../view/env/Mountains";
+import { EnvMoveContainer } from "../view/env/EnvMoveContainer";
 import { PlatformMoveContainer } from "../view/platforms/PlatformMoveContainer";
 import { TransitionsScreen } from "../view/TransitionsScreen";
 import { BgSkyFactory } from "./BgSkyFactory";
@@ -36,7 +36,7 @@ export interface IGameView {
   // bgSky: StandardTilingSprite;
   bgSky: StandardSprite;
   clouds: CloudsContainer;
-  mountains: Mountains;
+  mountains: EnvMoveContainer;
 }
 
 export class GameViewFactory extends AbstractBaseFactory {

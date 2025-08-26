@@ -112,6 +112,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     startSequence.addStepByStep(this._playGameStep, {
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
+      mountains: gameView.mountains,
     });
 
     const playSequence = new Sequence();
@@ -163,6 +164,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     this._mng.addDynamicStep(this._stopGameStep, {
       platformMoveContainer: gameView.platformMoveContainer,
       character: gameView.character,
+      mountains: gameView.mountains,
       isFail,
     });
 

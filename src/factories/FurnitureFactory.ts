@@ -20,9 +20,9 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
       this._models.platformsModel;
 
     const furniture: IFurniture = new Map();
-    const wrapperY = -sizePlatformTile / 2;
+    const wrapperY = -sizePlatformTile / 2 + 3;
     const spriteAnchor = { x: 0.5, y: 1 };
-    const spriteScale = { x: 1.2, y: 1.2 };
+    const spriteScale = { x: 1.3, y: 1.3 };
 
     for (const pltSet of platformSettings) {
       if (
@@ -50,6 +50,7 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
             sprites: spriteConfigs,
             sizePlatformTile,
             size: pltSet.size,
+            x: -1000,
           });
         }
 
@@ -80,6 +81,7 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
       sprites: spriteConfigs,
       sizePlatformTile,
       size: BigPlatformSizes.WIN,
+      x: -1000,
     };
     const frn = new Furniture(furnitureConf);
     frn.visible = false;

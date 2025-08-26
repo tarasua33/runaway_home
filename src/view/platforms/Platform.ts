@@ -73,6 +73,7 @@ export class Platform extends StandardContainer<PlatformConfig> {
 
   public setFurniture(fr: Furniture): void {
     this._fr = fr;
+    fr.alpha = 1;
     fr.visible = true;
     // fr.position = this.position;
   }
@@ -81,8 +82,9 @@ export class Platform extends StandardContainer<PlatformConfig> {
     const fr = this._fr;
 
     if (fr) {
+      fr.alpha = 0;
       fr.visible = false;
-      fr.position = { x: 0, y: 0 };
+      fr.position = { x: -1000, y: 0 };
     }
     this._fr = undefined;
 
