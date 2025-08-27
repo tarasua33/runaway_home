@@ -35,9 +35,9 @@ export const BACK_ELEMENTS = [
 ];
 
 export const FRONT_ELEMENTS = [
-  "bush_1",
-  "bush_2",
-  "bush_3",
-  "stouns",
-  "sunflowers",
+  "frontEnv/bush_1",
+  "frontEnv/bush_2",
+  "frontEnv/bush_3",
+  "frontEnv/stouns",
+  "frontEnv/sunflowers",
 ];

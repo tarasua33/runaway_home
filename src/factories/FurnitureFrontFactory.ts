@@ -20,7 +20,7 @@ export class FurnitureFrontFactory extends AbstractStandardFactory<IFurniture> {
       this._models.platformsModel;
 
     const furniture: IFurniture = new Map();
-    const wrapperY = -sizePlatformTile / 2 + 2;
+    const wrapperY = -sizePlatformTile / 2 + 3;
     const spriteAnchor = { x: 0.5, y: 1 };
     const spriteScale = { x: 0.5, y: 0.5 };
 
@@ -71,7 +71,7 @@ export class FurnitureFrontFactory extends AbstractStandardFactory<IFurniture> {
     // WIN FRN
     const spriteConfigs: StandardSpriteConfig[] = [];
     spriteConfigs.push({
-      texture: this._assetsLoader.getTexture("sunflowers"),
+      texture: this._assetsLoader.getTexture("frontEnv/sunflowers"),
       anchor: { x: 1, y: 1 },
       scale: spriteScale,
     });

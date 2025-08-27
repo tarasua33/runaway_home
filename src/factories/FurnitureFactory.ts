@@ -101,13 +101,18 @@ export class FurnitureFactory extends AbstractStandardFactory<IFurniture> {
     const textures = [];
 
     let width = offset;
+    let previousName = "";
 
     while (width < maxWidth) {
       const randomIndex = Math.floor(Math.random() * BACK_ELEMENTS.length);
-      const nextTexture = assetsLoader.getTexture(BACK_ELEMENTS[randomIndex]);
-      width += nextTexture.width + offset;
 
-      textures.push(nextTexture);
+      if (previousName !== BACK_ELEMENTS[randomIndex]) {
+        const nextTexture = assetsLoader.getTexture(BACK_ELEMENTS[randomIndex]);
+        width += nextTexture.width + offset;
+
+        previousName = BACK_ELEMENTS[randomIndex];
+        textures.push(nextTexture);
+      }
     }
 
     return textures;

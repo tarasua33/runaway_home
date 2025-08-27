@@ -13,6 +13,7 @@ import { BgSkyFactory } from "./BgSkyFactory";
 import { CharacterContainerFactory } from "./CharacterContainerFactory";
 import { CharacterFactory } from "./CharacterFactory";
 import { CloudsFactory } from "./CloudsFactory";
+import { FrontTreesFactory } from "./FrontTreesFactory";
 import { FurnitureContainerFactory } from "./FurnitureContainerFactory";
 import { FurnitureFactory, IFurniture } from "./FurnitureFactory";
 import { FurnitureFrontFactory } from "./FurnitureFrontFactory";
@@ -37,11 +38,11 @@ export interface IGameView {
   transitionsScreen: TransitionsScreen;
   furniture: IFurniture;
   furnitureFront: IFurniture;
-  // bgSky: StandardTilingSprite;
   bgSky: StandardSprite;
   clouds: CloudsContainer;
   mountains: EnvMoveContainer;
   shadows: EnvMoveContainer;
+  frontTrees: EnvMoveContainer;
 }
 
 export class GameViewFactory extends AbstractBaseFactory {
@@ -61,7 +62,7 @@ export class GameViewFactory extends AbstractBaseFactory {
     const shadowsFactory = new ShadowFactory();
     const furnitureFrontContainerFactory = new FurnitureContainerFactory();
     const furnitureFrontFactory = new FurnitureFrontFactory();
-    // FurnitureFrontFactory
+    const frontTreesFactory = new FrontTreesFactory();
 
     const bgSky = bgSkyFactory.buildUi({
       parent: mainScene,
@@ -103,6 +104,9 @@ export class GameViewFactory extends AbstractBaseFactory {
       furnitureFrontContainer,
       furnitureFront: furnitureFrontFactory.buildUi({
         parent: furnitureFrontContainer,
+      }),
+      frontTrees: frontTreesFactory.buildUi({
+        parent: mainScene,
       }),
       clouds: cloudsFactory.buildUi({
         parent: mainScene,

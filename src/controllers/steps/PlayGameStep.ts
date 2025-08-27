@@ -11,6 +11,7 @@ export interface PlayGameStepParams extends BaseStepParams {
   character: Character;
   mountains: EnvMoveContainer;
   shadows: EnvMoveContainer;
+  frontTrees: EnvMoveContainer;
 }
 
 export class PlayGameStep<
@@ -21,10 +22,12 @@ export class PlayGameStep<
     character,
     mountains,
     shadows,
+    frontTrees,
   }: T): void {
     platformMoveContainer.play();
     mountains.play();
     shadows.play();
+    frontTrees.play();
     character.start();
 
     this._onComplete();

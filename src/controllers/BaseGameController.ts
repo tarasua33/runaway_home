@@ -115,6 +115,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       character: gameView.character,
       mountains: gameView.mountains,
       shadows: gameView.shadows,
+      frontTrees: gameView.frontTrees,
     });
 
     const playSequence = new Sequence();
@@ -169,6 +170,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       character: gameView.character,
       mountains: gameView.mountains,
       shadows: gameView.shadows,
+      frontTrees: gameView.frontTrees,
       isFail,
     });
 
