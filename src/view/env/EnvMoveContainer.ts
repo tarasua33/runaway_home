@@ -44,6 +44,10 @@ export class EnvMoveContainer extends StandardContainer<EnvMoveContainerConfig> 
     console.warn(currentX);
   }
 
+  public setSpeed(speed: number): void {
+    this._speed = speed;
+  }
+
   public play(): void {
     this._isPlay = true;
   }

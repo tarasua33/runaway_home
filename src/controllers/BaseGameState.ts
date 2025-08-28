@@ -63,12 +63,12 @@ export class BaseGameState extends BaseState {
     const transitionController = this._transitionController;
     transitionController.completeStepSignal.addOnce(this._restartGame, this);
 
-    const pltModel = this._models.platformsModel;
+    const lvlModels = this._models.levelModel;
     transitionController.start({
       success,
       gameView: this._gameView,
       title: this._success
-        ? PHRASES.NEXT_LVL + ` ${pltModel.lvl + 1}`
+        ? PHRASES.NEXT_LVL + ` ${lvlModels.lvl + 1}`
         : PHRASES.REPLAY,
     });
   }
@@ -77,10 +77,10 @@ export class BaseGameState extends BaseState {
     const baseGameController = this._baseGameController;
 
     const pltModel = this._models.platformsModel;
-    pltModel.setUpLvl(
-      this._success ? pltModel.lvl + 1 : pltModel.lvl,
-      this._gameView.platforms,
-    );
+    const lvlModels = this._models.levelModel;
+
+    lvlModels.setUpLvl(this._success ? lvlModels.lvl + 1 : lvlModels.lvl);
+    pltModel.setUpLvl(lvlModels.lvl, this._gameView.platforms);
 
     baseGameController.completeStepSignal.addOnce(
       this._showTransitionScreen,
@@ -91,7 +91,7 @@ export class BaseGameState extends BaseState {
       userInteractionDispatcher: this._userInteractionDispatcher,
       gameLoaded: false,
       title: this._success
-        ? PHRASES.NEXT_LVL + ` ${pltModel.lvl}`
+        ? PHRASES.NEXT_LVL + ` ${lvlModels.lvl}`
         : PHRASES.REPLAY,
     });
   }

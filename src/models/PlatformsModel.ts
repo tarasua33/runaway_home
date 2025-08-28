@@ -1,5 +1,6 @@
 import { GAME_DIMENSIONS } from "../Game";
 import { Platform } from "../view/platforms/Platform";
+import { MAX_LVL } from "./LevelModel";
 
 export enum PlatformTypes {
   big = "big",
@@ -27,16 +28,10 @@ export interface IPlatformSetting {
   number: BigPlatformSizes;
 }
 
-interface IMechanicSettings {
-  speed: number;
-  finalDistance: number;
-}
-
 export type IPlatformsSizes = Map<BigPlatformSizes, Platform[]>;
 
 export type IPlatforms = Map<PlatformTypes, IPlatformsSizes>;
 
-const MAX_LVL = 5;
 const sizePlatformTile = 96;
 
 export class PlatformsModel {
@@ -94,7 +89,7 @@ export class PlatformsModel {
       number: 16,
     },
   ];
-
+  // private _lvl = 1;
   private _currentLvlPlatformsMap!: IPlatforms;
   private _lvlPlatformSettings = [
     // LVL 1
@@ -203,52 +198,13 @@ export class PlatformsModel {
       },
     ],
   ];
-  private _lvl = 1;
-  private _lvlMechanicSettings: IMechanicSettings[] = [
-    {
-      speed: 3,
-      finalDistance: GAME_DIMENSIONS.width * 3,
-    },
-    {
-      speed: 3.3,
-      finalDistance: GAME_DIMENSIONS.width * 4,
-    },
-    {
-      speed: 3.6,
-      finalDistance: GAME_DIMENSIONS.width * 5,
-    },
-    {
-      speed: 3.9,
-      finalDistance: GAME_DIMENSIONS.width * 6,
-    },
-    {
-      speed: 4.2,
-      finalDistance: GAME_DIMENSIONS.width * 6,
-    },
-    {
-      speed: 4.5,
-      finalDistance: GAME_DIMENSIONS.width * 6,
-    },
-  ];
-
-  public get lvl(): number {
-    return this._lvl;
-  }
-
-  public getLvlMechanicSettings(): IMechanicSettings {
-    // eslint-disable-next-line prettier/prettier
-    const set = this._lvlMechanicSettings[this._lvl > MAX_LVL ? MAX_LVL - 1 : this._lvl - 1];
-
-    return set;
-  }
 
   public getPlatforms(): IPlatforms {
     return this._currentLvlPlatformsMap;
   }
 
   public setUpLvl(newLvl: number, platformsAll: IPlatforms): void {
-    this._lvl = newLvl;
-
+    // this._lvl = newLvl;
     const settings =
       newLvl > MAX_LVL
         ? this._lvlPlatformSettings[MAX_LVL - 1]

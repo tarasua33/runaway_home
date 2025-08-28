@@ -81,7 +81,11 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
     }
     // 1
     startSequence.addStepByStep(this._setLvlSettingsStep, {
+      character: gameView.character,
       platformMoveContainer: gameView.platformMoveContainer,
+      mountains: gameView.mountains,
+      shadows: gameView.shadows,
+      frontTrees: gameView.frontTrees,
     });
     // 2
     startSequence.addStepByStep(new AwaitTimeStep(), {

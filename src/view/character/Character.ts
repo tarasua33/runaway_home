@@ -33,6 +33,7 @@ export class Character extends StandardContainer<CharacterConfig> {
   private _jumps = 0;
   private _firstCollide = true;
   private _isFinish = false;
+  private _speed = 1;
 
   public build(): void {
     super.build();
@@ -51,7 +52,11 @@ export class Character extends StandardContainer<CharacterConfig> {
   }
 
   public start(): void {
-    this._player.playAnimation("run", true);
+    this._player.playAnimation("run", true, this._speed);
+  }
+
+  public setSpeed(speed: number): void {
+    this._speed = speed;
   }
 
   private _applyPhysic(
@@ -82,7 +87,7 @@ export class Character extends StandardContainer<CharacterConfig> {
     } else if (this._isFinish) {
       this._player.playAnimation("idle", true);
     } else {
-      this._player.playAnimation("run", true);
+      this._player.playAnimation("run", true, this._speed);
     }
 
     this._jumps = 0;

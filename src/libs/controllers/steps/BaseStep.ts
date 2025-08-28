@@ -1,5 +1,6 @@
 import { CharacterModel } from "../../../models/CharacterModel";
 import { IModels } from "../../../models/IModels";
+import { LevelModel } from "../../../models/LevelModel";
 import { PlatformsModel } from "../../../models/PlatformsModel";
 import { Signal } from "../../utils/Signal";
 
@@ -18,6 +19,7 @@ export abstract class BaseStep<T extends BaseStepParams = BaseStepParams> {
     this._models = {
       platformsModel: PlatformsModel.getModel(),
       characterModel: CharacterModel.getModel(),
+      levelModel: LevelModel.getModel(),
     };
   }
 

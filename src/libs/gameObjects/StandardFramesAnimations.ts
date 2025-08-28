@@ -1,10 +1,13 @@
-import { AnimatedSprite, AnimatedSpriteOptions } from "pixi.js";
 import { IGameObject } from "./IGameObject";
 import { ITicker } from "../utils/ITicker";
 import {
   StandardContainer,
   StandardContainerConfig,
 } from "./StandardContainer";
+import {
+  StandardAnimatedSprite,
+  StandardAnimatedSpriteOptions,
+} from "./StandardAnimatedSprite";
 
 export interface StandardFramesAnimationsConfig
   extends StandardContainerConfig {
@@ -13,7 +16,7 @@ export interface StandardFramesAnimationsConfig
   visible?: boolean;
   animations: {
     name: string;
-    animation: AnimatedSpriteOptions;
+    animation: StandardAnimatedSpriteOptions;
   }[];
 }
 
@@ -22,8 +25,8 @@ export class StandardFramesAnimations<T extends StandardFramesAnimationsConfig =
   extends StandardContainer
   // eslint-disable-next-line prettier/prettier
   implements IGameObject {
-  protected _animations = new Map<string, AnimatedSprite>();
-  protected _active: AnimatedSprite | undefined;
+  protected _animations = new Map<string, StandardAnimatedSprite>();
+  protected _active: StandardAnimatedSprite | undefined;
   protected _config: T;
 
   constructor(config: T) {
@@ -36,7 +39,7 @@ export class StandardFramesAnimations<T extends StandardFramesAnimationsConfig =
     const { animations } = this._config;
 
     for (const anm of animations) {
-      const animation = new AnimatedSprite(anm.animation);
+      const animation = new StandardAnimatedSprite(anm.animation);
       this.addChild(animation);
       animation.visible = false;
       animation.stop();
@@ -44,7 +47,7 @@ export class StandardFramesAnimations<T extends StandardFramesAnimationsConfig =
     }
   }
 
-  public playAnimation(name: string, loop = false): void {
+  public playAnimation(name: string, loop = false, speedMultiplier = 1): void {
     if (this._active) {
       this._active.loop = false;
       this._active.stop();
@@ -55,6 +58,7 @@ export class StandardFramesAnimations<T extends StandardFramesAnimationsConfig =
     const active = (this._active = this._animations.get(name)!);
     active.visible = true;
     active.loop = loop;
+    active.animationSpeed = active.baseSpeed * speedMultiplier;
     active.play();
   }
 
@@ -71,12 +75,6 @@ export class StandardFramesAnimations<T extends StandardFramesAnimationsConfig =
       if (child.resize) child.resize();
     }
   }
-
-  // /* eslint-disable */
-  // private _setBaseConfig(ctx: any): void {
-  //
-  // }
-  // /* eslint-enable */
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public update(_ticker: ITicker): void {
