@@ -5,6 +5,7 @@ import {
 import { Character } from "../../view/character/Character";
 import { EnvMoveContainer } from "../../view/env/EnvMoveContainer";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
+import { TapHint } from "../../view/ui/TapHint";
 
 export interface PlayGameStepParams extends BaseStepParams {
   platformMoveContainer: PlatformMoveContainer;
@@ -12,6 +13,7 @@ export interface PlayGameStepParams extends BaseStepParams {
   mountains: EnvMoveContainer;
   shadows: EnvMoveContainer;
   frontTrees: EnvMoveContainer;
+  tapHint: TapHint;
 }
 
 export class PlayGameStep<
@@ -23,12 +25,15 @@ export class PlayGameStep<
     mountains,
     shadows,
     frontTrees,
+    tapHint,
   }: T): void {
     platformMoveContainer.play();
     mountains.play();
     shadows.play();
     frontTrees.play();
     character.start();
+    tapHint.visible = true;
+    tapHint.play();
 
     this._onComplete();
   }

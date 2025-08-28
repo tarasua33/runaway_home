@@ -9,6 +9,7 @@ import { CloudsContainer } from "../view/env/Clouds";
 import { EnvMoveContainer } from "../view/env/EnvMoveContainer";
 import { PlatformMoveContainer } from "../view/platforms/PlatformMoveContainer";
 import { TransitionsScreen } from "../view/TransitionsScreen";
+import { TapHint } from "../view/ui/TapHint";
 import { BgSkyFactory } from "./BgSkyFactory";
 import { CharacterContainerFactory } from "./CharacterContainerFactory";
 import { CharacterFactory } from "./CharacterFactory";
@@ -21,11 +22,13 @@ import { MountainsFactory } from "./MountainsFactory";
 import { PlatformMoveContainerFactory } from "./PlatformMoveContainerFactory";
 import { PlatformsFactory } from "./PlatformsFactory";
 import { ShadowFactory } from "./ShadowFactory";
+import { TapHintFactory } from "./TapHintFactory";
 import { TransitionsScreenFactory } from "./TransitionsScreenFactory";
 
 interface IBuildConfig {
   mainScene: StandardContainer;
   physicEngine: PhysicEngine;
+  uiContainer: StandardContainer;
 }
 
 export interface IGameView {
@@ -43,6 +46,7 @@ export interface IGameView {
   mountains: EnvMoveContainer;
   shadows: EnvMoveContainer;
   frontTrees: EnvMoveContainer;
+  tapHint: TapHint;
 }
 
 export class GameViewFactory extends AbstractBaseFactory {
@@ -63,6 +67,7 @@ export class GameViewFactory extends AbstractBaseFactory {
     const furnitureFrontContainerFactory = new FurnitureContainerFactory();
     const furnitureFrontFactory = new FurnitureFrontFactory();
     const frontTreesFactory = new FrontTreesFactory();
+    const tapHintFactory = new TapHintFactory();
 
     const bgSky = bgSkyFactory.buildUi({
       parent: mainScene,
@@ -109,6 +114,9 @@ export class GameViewFactory extends AbstractBaseFactory {
         parent: mainScene,
       }),
       clouds: cloudsFactory.buildUi({
+        parent: mainScene,
+      }),
+      tapHint: tapHintFactory.buildUi({
         parent: mainScene,
       }),
       transitionsScreen: transitionsScreenFactory.buildUi({

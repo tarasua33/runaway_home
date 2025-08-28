@@ -8,6 +8,7 @@ import { BigPlatformSizes, IPlatforms } from "../../models/PlatformsModel";
 import { Character } from "../../view/character/Character";
 import { Platform } from "../../view/platforms/Platform";
 import { PlatformMoveContainer } from "../../view/platforms/PlatformMoveContainer";
+import { TapHint } from "../../view/ui/TapHint";
 
 export interface ResetGameStepParams extends BaseStepParams {
   platforms: IPlatforms;
@@ -15,13 +16,14 @@ export interface ResetGameStepParams extends BaseStepParams {
   character: Character;
   furniture: IFurniture;
   furnitureFront: IFurniture;
+  tapHint: TapHint;
 }
 
 export class ResetGameStep<
   T extends ResetGameStepParams = ResetGameStepParams,
 > extends BaseStep<ResetGameStepParams> {
   public start(params: T): void {
-    const { platformMoveContainer, character } = params;
+    const { platformMoveContainer, character, tapHint } = params;
     this._params = params;
     platformMoveContainer.removePlatformSignal.add(
       this._onPlatformRemoved,
@@ -29,6 +31,7 @@ export class ResetGameStep<
     );
     platformMoveContainer.returnPlatforms();
 
+    tapHint.visible = false;
     character.visible = false;
     character.reset();
 

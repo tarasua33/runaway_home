@@ -52,6 +52,7 @@ export class TransitionController extends Controller<IControllerBaseParams> {
       character: gameView.character,
       furniture: gameView.furniture,
       furnitureFront: gameView.furnitureFront,
+      tapHint: gameView.tapHint,
     } as ResetGameStepParams);
     // 4
     baseSequence.addStepByStep(new AwaitTimeStep(), {

@@ -5,6 +5,8 @@ import { PhysicEngine } from "./libs/physic/PhysicEngine";
 import { BaseGameState } from "./controllers/BaseGameState";
 import { UserInteractionDispatcher } from "./libs/utils/UserInteractionDispatcher";
 import { ITicker } from "./libs/utils/ITicker";
+import { StandardContainer } from "./libs/gameObjects/StandardContainer";
+import { ViewPort } from "./libs/gameObjects/IGameObject";
 
 const widthGame = 1280;
 const heightGame = 720;
@@ -19,6 +21,7 @@ export class Game {
   private _stage: Container;
   private _view: HTMLCanvasElement;
   private _mainScene!: MainScene;
+  private _uiContainer!: StandardContainer;
   private _physicEngine!: PhysicEngine;
 
   constructor(stage: Container, view: HTMLCanvasElement) {
@@ -28,6 +31,10 @@ export class Game {
     const mainScene = (this._mainScene = new MainScene({}));
     mainScene.build();
     stage.addChild(mainScene);
+
+    const uiContainer = (this._uiContainer = new StandardContainer({}));
+    uiContainer.build();
+    stage.addChild(uiContainer);
   }
 
   public async init(): Promise<boolean> {
@@ -58,6 +65,7 @@ export class Game {
       userInteractionDispatcher,
       mainScene,
       physicEngine,
+      uiContainer: this._uiContainer,
     });
 
     return true;
@@ -68,7 +76,8 @@ export class Game {
     if (this._physicEngine) this._physicEngine.update(deltaMS);
   }
 
-  public resize(): void {
-    this._mainScene.resize();
+  public resize(viewPort: ViewPort): void {
+    this._mainScene.resize(viewPort);
+    this._uiContainer.resize(viewPort);
   }
 }

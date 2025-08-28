@@ -1,6 +1,11 @@
 import { Container } from "pixi.js";
 import { ITicker } from "../utils/ITicker";
 
+export interface ViewPort {
+  w: number;
+  h: number;
+}
+
 export interface IGameObject extends Container {
   build(): void;
 
@@ -8,5 +13,5 @@ export interface IGameObject extends Container {
 
   reset(): void;
 
-  resize(): void;
+  resize(options?: ViewPort): void;
 }

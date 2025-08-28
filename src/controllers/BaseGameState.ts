@@ -10,6 +10,7 @@ interface ISTateParams {
   userInteractionDispatcher: UserInteractionDispatcher;
   mainScene: StandardContainer;
   physicEngine: PhysicEngine;
+  uiContainer: StandardContainer;
 }
 
 const PHRASES = {
@@ -30,6 +31,7 @@ export class BaseGameState extends BaseState {
     userInteractionDispatcher,
     mainScene,
     physicEngine,
+    uiContainer,
   }: ISTateParams): void {
     this._userInteractionDispatcher = userInteractionDispatcher;
 
@@ -37,6 +39,7 @@ export class BaseGameState extends BaseState {
     const gameView = (this._gameView = this._buildGameObjects(
       mainScene,
       physicEngine,
+      uiContainer,
     ));
 
     const OVERWRITE_LVL = 1;
@@ -99,11 +102,13 @@ export class BaseGameState extends BaseState {
   private _buildGameObjects(
     mainScene: StandardContainer,
     physicEngine: PhysicEngine,
+    uiContainer: StandardContainer,
   ): IGameView {
     const uiFactory = new GameViewFactory();
     const gameUI = uiFactory.buildUi({
       mainScene,
       physicEngine,
+      uiContainer,
     });
 
     return gameUI;

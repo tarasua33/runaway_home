@@ -120,6 +120,7 @@ export class BaseGameController extends Controller<IControllerBaseParams> {
       mountains: gameView.mountains,
       shadows: gameView.shadows,
       frontTrees: gameView.frontTrees,
+      tapHint: gameView.tapHint,
     });
 
     const playSequence = new Sequence();

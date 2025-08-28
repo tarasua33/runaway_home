@@ -1,5 +1,5 @@
 import { Container, ContainerOptions } from "pixi.js";
-import { IGameObject } from "./IGameObject";
+import { IGameObject, ViewPort } from "./IGameObject";
 import { ITicker } from "../utils/ITicker";
 
 export interface StandardContainerConfig extends ContainerOptions {
@@ -33,9 +33,9 @@ export class StandardContainer<T extends StandardContainerConfig = StandardConta
     }
   }
 
-  public resize(): void {
+  public resize(viewPort?: ViewPort): void {
     for (const child of this.children as IGameObject[]) {
-      if (child.resize) child.resize();
+      if (child.resize) child.resize(viewPort);
     }
   }
 

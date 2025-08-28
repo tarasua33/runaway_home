@@ -35,7 +35,10 @@ import Stats from "stats.js";
       (vh - GAME_DIMENSIONS.height * scale) / 2,
     );
 
-    game.resize();
+    game.resize({
+      w: window.innerWidth / scale,
+      h: window.innerHeight / scale,
+    });
   };
 
   resize();
