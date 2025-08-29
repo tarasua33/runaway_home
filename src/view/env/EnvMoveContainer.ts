@@ -40,8 +40,6 @@ export class EnvMoveContainer extends StandardContainer<EnvMoveContainerConfig> 
       part.build();
       this.addChild(part);
     }
-
-    console.warn(currentX);
   }
 
   public setSpeed(speed: number): void {

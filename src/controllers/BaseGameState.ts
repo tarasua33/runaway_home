@@ -43,7 +43,9 @@ export class BaseGameState extends BaseState {
     ));
 
     const OVERWRITE_LVL = 1;
-    this._models.platformsModel.setUpLvl(OVERWRITE_LVL, gameView.platforms);
+    const { levelModel, platformsModel } = this._models;
+    levelModel.setUpLvl(OVERWRITE_LVL);
+    platformsModel.setUpLvl(OVERWRITE_LVL, gameView.platforms);
 
     // // START BASE GAME CONTROLLERS
     const baseGameController = (this._baseGameController =

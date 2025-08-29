@@ -67,7 +67,7 @@ export class PlatformMoveContainer extends StandardContainer<PlatformMoveContain
   public returnPlatforms(): void {
     const platforms = this._platforms;
     while (platforms.length > 0) {
-      const plt = this._platforms.shift()!;
+      const plt = platforms.pop()!;
       plt.visible = false;
       this.removeChild(plt);
       this.removePlatformSignal.dispatch(plt);

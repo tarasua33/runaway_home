@@ -73,6 +73,10 @@ export class Platform extends StandardContainer<PlatformConfig> {
   }
 
   public setFrontFurniture(fr: Furniture): void {
+    if (this._frontFr) {
+      console.debug("FURNITURE EXIST");
+    }
+
     this._frontFr = fr;
     fr.alpha = 1;
     fr.visible = true;
@@ -92,6 +96,10 @@ export class Platform extends StandardContainer<PlatformConfig> {
   }
 
   public setFurniture(fr: Furniture): void {
+    if (this._furniture) {
+      console.debug("FURNITURE EXIST");
+    }
+
     this._furniture = fr;
     fr.alpha = 1;
     fr.visible = true;

@@ -55,8 +55,10 @@ export class UpdatePlatformsStep<
 
   private _onPlatformRemoved(plt: Platform): void {
     const { platforms, furniture, furnitureFront } = this._params;
+
     removeFurniture(plt, furniture, false);
     removeFurniture(plt, furnitureFront, true);
+
     plt.setPosition(-2000, 0);
     if (plt.isWinPlatform) {
       platforms.get(plt.typePlt)!.get(BigPlatformSizes.WIN)!.push(plt);
@@ -76,8 +78,8 @@ export class UpdatePlatformsStep<
 
       this._nextAddWinPlatform = false;
 
-      addFurniture([newPlt], furnitureFront, true, true);
       addFurniture([newPlt], furniture, false, true);
+      addFurniture([newPlt], furnitureFront, true, true);
     } else {
       const platformBigData: IPlatformData[] = getPlatformData(
         platforms,
@@ -89,6 +91,7 @@ export class UpdatePlatformsStep<
 
       const arr = platforms.get(PlatformTypes.big)!.get(data.size)!;
       newPlt = arr.pop()!;
+
       addFurniture([newPlt], furniture, false);
       addFurniture([newPlt], furnitureFront, true);
     }

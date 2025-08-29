@@ -79,10 +79,11 @@ export function addFurniture(
 
     if (winPlatform) {
       const arr = furniture.get(BigPlatformSizes.WIN)!;
+      const frn = arr.pop()!;
       if (isFront) {
-        plt.setFrontFurniture(arr[0]!);
+        plt.setFrontFurniture(frn);
       } else {
-        plt.setFurniture(arr[0]!);
+        plt.setFurniture(frn);
       }
     } else if (size !== BigPlatformSizes.ONE) {
       const arr = furniture.get(size)!;
